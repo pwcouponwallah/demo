@@ -3,600 +3,1520 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PW Coupon Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="description" content="PW Coupon Admin Dashboard - Track coupon usage and student enrollments">
+    <title>PW Coupon Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6c63ff;
-            --primary-light: #8a84ff;
-            --primary-dark: #4a42e8;
-            --sidebar-width: 250px;
+            --primary: #1a1a1a;
+            --secondary: #333333;
+            --accent: #666666;
+            --light: #f9f9f9;
+            --dark: #111111;
+            --gray: #888888;
+            --bg: #f5f3f0;
+            --text: #2d2d2d;
+            --border: #e0e0e0;
+            --cream: #f5f3f0;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fb;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            -webkit-font-smoothing: antialiased;
         }
         
-        /* Login Screen */
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            color: var(--text);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            color: var(--accent);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+        
+        /* Main Layout */
+        .admin-layout {
+            display: flex;
+            min-height: calc(100vh - 68px);
         }
         
         /* Sidebar */
         .sidebar {
-            background-color: white;
-            height: 100vh;
-            position: fixed;
-            width: var(--sidebar-width);
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: transform 0.3s ease;
+            width: 240px;
+            background-color: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 0;
+            transition: var(--transition);
+            position: sticky;
+            top: 68px;
+            height: calc(100vh - 68px);
+            overflow-y: auto;
         }
         
-        .sidebar-brand {
-            padding: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-menu li a {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-        }
-        
-        .sidebar-nav {
-            padding: 1rem 0;
-        }
-        
-        .nav-link {
+            gap: 0.75rem;
             padding: 0.75rem 1.5rem;
-            color: #555;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.95rem;
             font-weight: 500;
-            border-left: 3px solid transparent;
-            display: flex;
-            align-items: center;
         }
         
-        .nav-link:hover, .nav-link.active {
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background-color: var(--light);
             color: var(--primary);
-            background-color: rgba(108, 99, 255, 0.05);
-            border-left-color: var(--primary);
         }
         
-        .nav-link i {
-            margin-right: 0.75rem;
-            width: 1.25rem;
+        .sidebar-menu li a i {
+            width: 20px;
             text-align: center;
+        }
+        
+        .sidebar-menu-title {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray);
+            font-weight: 600;
+            margin-top: 1.5rem;
         }
         
         /* Main Content */
         .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 1rem;
-            transition: margin-left 0.3s ease;
+            flex: 1;
+            padding: 2rem;
+            background-color: var(--bg);
         }
         
-        /* Mobile Menu Toggle */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
             color: var(--primary);
         }
         
-        /* Responsive Adjustments */
-        @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
+        .page-actions {
+            display: flex;
+            gap: 1rem;
         }
         
-        /* Dashboard Cards */
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+        
+        /* Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
         .stat-card {
-            background: white;
-            border-radius: 10px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         
-        /* Loading Overlay */
-        .loading-overlay {
+        .stat-card-title {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .stat-card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .stat-card-change.positive {
+            color: var(--success);
+        }
+        
+        .stat-card-change.negative {
+            color: var(--danger);
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+        
+        .filter-select:focus, .filter-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+            outline: none;
+        }
+        
+        /* Data Table */
+        .data-table-container {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table thead th {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .data-table tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+        
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: var(--light);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .badge-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 1rem 0;
+        }
+        
+        .pagination-info {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Charts */
+        .chart-container {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chart-placeholder {
+            height: 300px;
+            background-color: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+        
+        /* Date Range Picker */
+        .date-range-picker {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: var(--white);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        
+        .date-range-picker input {
+            border: none;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: transparent;
+            padding: 0.25rem 0;
+        }
+        
+        .date-range-picker input:focus {
+            outline: none;
+        }
+        
+        .date-range-divider {
+            color: var(--gray);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(255,255,255,0.8);
+            background-color: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-container {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: var(--white);
+            color: var(--text);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+            outline: none;
+        }
+        
+        /* Loading State */
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            min-height: 200px;
+        }
+        
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid rgba(0,0,0,0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state-title {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .empty-state-text {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 200px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                padding: 1rem 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+            
+            .sidebar-menu li {
+                margin-bottom: 0;
+                margin-right: 0.5rem;
+            }
+            
+            .sidebar-menu li a {
+                white-space: nowrap;
+            }
+            
+            .sidebar-menu-title {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .page-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-    
-    <!-- Login Screen -->
-    <div id="loginScreen">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-4">
-                    <div class="login-container mt-5">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-tag fa-3x mb-3" style="color: var(--primary);"></i>
-                            <h2>Admin Login</h2>
-                            <p class="text-muted">Enter your credentials to continue</p>
-                        </div>
-                        
-                        <form id="loginForm">
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-sign-in-alt me-2"></i> Sign In
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Admin Dashboard -->
-    <div id="adminDashboard" style="display: none;">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-brand">
-                <span><i class="fas fa-tag me-2"></i> PW Admin</span>
-                <button class="mobile-menu-btn d-lg-none" id="sidebarToggle">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-tag logo-icon"></i>
+                <span>PW Coupon Admin</span>
+            </a>
             
-            <nav class="sidebar-nav">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-section="dashboard">
-                            <i class="fas fa-tachometer-alt"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="submissions">
-                            <i class="fas fa-list"></i>
-                            Submissions
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="analytics">
-                            <i class="fas fa-chart-bar"></i>
-                            Analytics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="settings">
-                            <i class="fas fa-cog"></i>
-                            Settings
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Logout
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="user-profile">
+                <span>Admin User</span>
+                <div class="user-avatar">AU</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-title">Dashboard</li>
+                <li><a href="#" class="active"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                <li><a href="#"><i class="fas fa-tag"></i> Coupons</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Students</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> Courses</a></li>
+                
+                <li class="sidebar-menu-title">Settings</li>
+                <li><a href="#"><i class="fas fa-envelope"></i> Email Templates</a></li>
+                <li><a href="#"><i class="fas fa-user-shield"></i> Admin Users</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> System Settings</a></li>
+            </ul>
         </div>
         
         <!-- Main Content -->
-        <div class="main-content" id="mainContent">
-            <!-- Top Navigation -->
-            <nav class="navbar navbar-light bg-light mb-4 d-lg-none">
-                <div class="container-fluid">
-                    <button class="mobile-menu-btn" id="mobileMenuBtn">
-                        <i class="fas fa-bars"></i>
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Coupon Analytics</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" id="exportBtn">
+                        <i class="fas fa-download"></i> Export Data
                     </button>
-                    <span class="navbar-brand mb-0 h1">Dashboard</span>
+                    <button class="btn btn-primary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
-            </nav>
+            </div>
             
-            <!-- Dashboard Content -->
-            <div id="dashboardSection">
-                <div class="row">
-                    <div class="col-md-6 col-lg-3">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <i class="fas fa-file-alt fa-2x" style="color: var(--primary);"></i>
-                                </div>
-                                <div>
-                                    <h6 class="text-muted mb-1">Total Submissions</h6>
-                                    <h3 id="totalSubmissions">0</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 col-lg-3">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <i class="fas fa-paper-plane fa-2x" style="color: #28a745;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="text-muted mb-1">Emails Sent</h6>
-                                    <h3 id="sentEmails">0</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 col-lg-3">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <i class="fas fa-exclamation-circle fa-2x" style="color: #dc3545;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="text-muted mb-1">Failed Emails</h6>
-                                    <h3 id="failedEmails">0</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 col-lg-3">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <i class="fas fa-clock fa-2x" style="color: #ffc107;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="text-muted mb-1">Pending Emails</h6>
-                                    <h3 id="pendingEmails">0</h3>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-title">Total Coupons Sent</div>
+                    <div class="stat-card-value" id="totalCoupons">0</div>
+                    <div class="stat-card-change positive">
+                        <i class="fas fa-arrow-up"></i> 12% from last month
                     </div>
                 </div>
                 
-                <!-- Recent Submissions Table -->
-                <div class="card mt-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Recent Submissions</h5>
-                        <a href="#" class="btn btn-sm btn-outline-primary" data-section="submissions">View All</a>
+                <div class="stat-card">
+                    <div class="stat-card-title">Successful Enrollments</div>
+                    <div class="stat-card-value" id="successEnrollments">0</div>
+                    <div class="stat-card-change positive">
+                        <i class="fas fa-arrow-up"></i> 8% from last month
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="recentSubmissionsTable">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Course</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Filled by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-title">Most Popular Course</div>
+                    <div class="stat-card-value" id="popularCourse">-</div>
+                    <div class="stat-card-change positive">
+                        <i class="fas fa-arrow-up"></i> 15% of total
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-title">Conversion Rate</div>
+                    <div class="stat-card-value" id="conversionRate">0%</div>
+                    <div class="stat-card-change negative">
+                        <i class="fas fa-arrow-down"></i> 2% from last month
                     </div>
                 </div>
             </div>
             
-            <!-- Submissions Section (Hidden by default) -->
-            <div id="submissionsSection" style="display: none;">
-                <!-- Content will be loaded dynamically -->
+            <!-- Date Range Picker -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label class="filter-label">Date Range</label>
+                    <div class="date-range-picker">
+                        <input type="date" id="startDate" class="filter-input">
+                        <span class="date-range-divider">to</span>
+                        <input type="date" id="endDate" class="filter-input">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Time Period</label>
+                    <select id="timePeriod" class="filter-select">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly" selected>Monthly</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Course Category</label>
+                    <select id="courseFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="PW NEET">NEET</option>
+                        <option value="PW IIT-JEE">JEE</option>
+                        <option value="PW UPSC">UPSC</option>
+                        <option value="PW GATE">GATE</option>
+                        <option value="PW Banking">Banking</option>
+                        <option value="PW NDA">NDA</option>
+                        <option value="PW CLAT">CLAT</option>
+                        <option value="PW MBA">MBA</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="all">All Statuses</option>
+                        <option value="Sent">Sent</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Failed">Failed</option>
+                    </select>
+                </div>
             </div>
             
-            <!-- Analytics Section (Hidden by default) -->
-            <div id="analyticsSection" style="display: none;">
-                <!-- Content will be loaded dynamically -->
+            <!-- Charts -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Coupons Sent Over Time</h3>
+                    <div class="chart-actions">
+                        <button class="btn btn-secondary btn-sm">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-placeholder" id="couponChart">
+                    <i class="fas fa-chart-bar"></i> Chart will load here
+                </div>
             </div>
             
-            <!-- Settings Section (Hidden by default) -->
-            <div id="settingsSection" style="display: none;">
-                <!-- Content will be loaded dynamically -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Course Category Distribution</h3>
+                    <div class="chart-actions">
+                        <button class="btn btn-secondary btn-sm">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-placeholder" id="categoryChart">
+                    <i class="fas fa-chart-pie"></i> Chart will load here
+                </div>
+            </div>
+            
+            <!-- Data Table -->
+            <div class="data-table-container">
+                <div class="loading-state" id="tableLoading">
+                    <div class="loading-spinner"></div>
+                </div>
+                
+                <table class="data-table" id="couponDataTable">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Coupon Code</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <div class="pagination-info" id="paginationInfo">
+                        Showing 1 to 10 of 0 entries
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn btn-secondary btn-sm" id="prevPage" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="nextPage" disabled>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Student Details Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Student Details</h3>
+                <button class="close-btn" id="closeStudentModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="loading-state" id="studentLoading">
+                    <div class="loading-spinner"></div>
+                </div>
+                
+                <div id="studentDetails">
+                    <!-- Student details will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeStudentModalBtn">Close</button>
+                <button class="btn btn-primary" id="resendCouponBtn">
+                    <i class="fas fa-paper-plane"></i> Resend Coupon
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Export Data</h3>
+                <button class="close-btn" id="closeExportModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Export Format</label>
+                    <select class="form-control" id="exportFormat">
+                        <option value="csv">CSV (Comma Separated Values)</option>
+                        <option value="excel">Excel (XLSX)</option>
+                        <option value="pdf">PDF Document</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date Range</label>
+                    <div class="date-range-picker">
+                        <input type="date" id="exportStartDate" class="form-control">
+                        <span class="date-range-divider">to</span>
+                        <input type="date" id="exportEndDate" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Columns to Include</label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Timestamp
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Student Name
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Email
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Mobile
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Course
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Category
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Coupon Code
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Status
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" checked> Email Sent Date
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelExportBtn">Cancel</button>
+                <button class="btn btn-primary" id="confirmExportBtn">
+                    <i class="fas fa-download"></i> Export Data
+                </button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Configuration - Replace with your Apps Script URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqUMoa1apeE9pZum9Be3yvTxLfdITvrvN28F5VVOqehxxbA_v3nzRPEI65Vq5uMRg-/exec';
-        let sessionToken = null;
-        let sessionExpiry = null;
-        
-        // DOM Elements
-        const loginScreen = document.getElementById('loginScreen');
-        const adminDashboard = document.getElementById('adminDashboard');
-        const loginForm = document.getElementById('loginForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mainContent = document.getElementById('mainContent');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Event Listeners
-            loginForm.addEventListener('submit', handleLogin);
-            logoutBtn.addEventListener('click', handleLogout);
-            sidebarToggle.addEventListener('click', toggleSidebar);
-            mobileMenuBtn.addEventListener('click', toggleSidebar);
+            // Set default dates
+            const today = new Date();
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
             
-            // Navigation links
-            document.querySelectorAll('.nav-link[data-section]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    loadSection(this.getAttribute('data-section'));
-                });
+            document.getElementById('startDate').valueAsDate = oneMonthAgo;
+            document.getElementById('endDate').valueAsDate = today;
+            document.getElementById('exportStartDate').valueAsDate = oneMonthAgo;
+            document.getElementById('exportEndDate').valueAsDate = today;
+            
+            // Load initial data
+            loadData();
+            
+            // Event listeners for filters
+            document.getElementById('timePeriod').addEventListener('change', function() {
+                updateDateRangeBasedOnPeriod();
+                loadData();
             });
             
-            // Check for existing session in localStorage
-            checkExistingSession();
+            document.getElementById('startDate').addEventListener('change', loadData);
+            document.getElementById('endDate').addEventListener('change', loadData);
+            document.getElementById('courseFilter').addEventListener('change', loadData);
+            document.getElementById('statusFilter').addEventListener('change', loadData);
+            
+            // Modal controls
+            const studentModal = document.getElementById('studentModal');
+            const closeStudentModal = document.getElementById('closeStudentModal');
+            const closeStudentModalBtn = document.getElementById('closeStudentModalBtn');
+            
+            closeStudentModal.addEventListener('click', function() {
+                studentModal.classList.remove('active');
+            });
+            
+            closeStudentModalBtn.addEventListener('click', function() {
+                studentModal.classList.remove('active');
+            });
+            
+            // Export modal controls
+            const exportModal = document.getElementById('exportModal');
+            const exportBtn = document.getElementById('exportBtn');
+            const closeExportModal = document.getElementById('closeExportModal');
+            const cancelExportBtn = document.getElementById('cancelExportBtn');
+            
+            exportBtn.addEventListener('click', function() {
+                exportModal.classList.add('active');
+            });
+            
+            closeExportModal.addEventListener('click', function() {
+                exportModal.classList.remove('active');
+            });
+            
+            cancelExportBtn.addEventListener('click', function() {
+                exportModal.classList.remove('active');
+            });
+            
+            document.getElementById('confirmExportBtn').addEventListener('click', exportData);
+            
+            // Refresh button
+            document.getElementById('refreshBtn').addEventListener('click', loadData);
+            
+            // Pagination controls
+            document.getElementById('prevPage').addEventListener('click', function() {
+                currentPage--;
+                loadData();
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', function() {
+                currentPage++;
+                loadData();
+            });
         });
         
-        // Handle login form submission
-        async function handleLogin(e) {
-            e.preventDefault();
-            showLoading();
+        // Global variables
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let totalRows = 0;
+        
+        // Function to update date range based on selected period
+        function updateDateRangeBasedOnPeriod() {
+            const period = document.getElementById('timePeriod').value;
+            const today = new Date();
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
             
-            const password = document.getElementById('password').value;
+            let startDate = new Date();
             
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'login',
-                        password: password
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.result === 'success') {
-                    sessionToken = data.data.sessionToken;
-                    sessionExpiry = new Date(data.data.expiresAt);
-                    
-                    // Store session in localStorage
-                    localStorage.setItem('adminSession', JSON.stringify({
-                        token: sessionToken,
-                        expiresAt: data.data.expiresAt
-                    }));
-                    
-                    // Hide login, show dashboard
-                    loginScreen.style.display = 'none';
-                    adminDashboard.style.display = 'block';
-                    
-                    // Load dashboard data
-                    loadDashboardData();
-                } else {
-                    alert('Login failed: ' + (data.error || 'Invalid credentials'));
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Login failed. Please try again.');
-            } finally {
-                hideLoading();
+            switch(period) {
+                case 'daily':
+                    // Today only
+                    startDateInput.valueAsDate = today;
+                    endDateInput.valueAsDate = today;
+                    break;
+                case 'weekly':
+                    // Last 7 days
+                    startDate.setDate(today.getDate() - 7);
+                    startDateInput.valueAsDate = startDate;
+                    endDateInput.valueAsDate = today;
+                    break;
+                case 'monthly':
+                    // Last 30 days
+                    startDate.setMonth(today.getMonth() - 1);
+                    startDateInput.valueAsDate = startDate;
+                    endDateInput.valueAsDate = today;
+                    break;
+                case 'custom':
+                    // No change, let user select
+                    break;
             }
         }
         
-        // Handle logout
-        function handleLogout() {
-            sessionToken = null;
-            sessionExpiry = null;
-            localStorage.removeItem('adminSession');
+        // Function to load data from Google Apps Script
+        function loadData() {
+            // Show loading state
+            document.getElementById('tableLoading').style.display = 'flex';
+            document.getElementById('tableBody').innerHTML = '';
             
-            // Show login, hide dashboard
-            loginScreen.style.display = 'block';
-            adminDashboard.style.display = 'none';
+            // Get filter values
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const courseFilter = document.getElementById('courseFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
             
-            // Reset form
-            loginForm.reset();
-        }
-        
-        // Toggle sidebar on mobile
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            mainContent.classList.toggle('sidebar-open');
-        }
-        
-        // Check for existing session
-        function checkExistingSession() {
-            const savedSession = localStorage.getItem('adminSession');
+            // Prepare request data
+            const requestData = {
+                action: 'getCouponData',
+                startDate: startDate,
+                endDate: endDate,
+                courseFilter: courseFilter,
+                statusFilter: statusFilter,
+                page: currentPage,
+                rowsPerPage: rowsPerPage
+            };
             
-            if (savedSession) {
-                const session = JSON.parse(savedSession);
-                const now = new Date();
-                const expiry = new Date(session.expiresAt);
-                
-                if (now < expiry) {
-                    sessionToken = session.token;
-                    sessionExpiry = expiry;
-                    
-                    loginScreen.style.display = 'none';
-                    adminDashboard.style.display = 'block';
-                    loadDashboardData();
-                } else {
-                    localStorage.removeItem('adminSession');
-                }
-            }
-        }
-        
-        // Load dashboard data
-        async function loadDashboardData() {
-            showLoading();
+            // Your Google Apps Script deployment URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwl7x5LAg4qTyvwHrPdKgnwTbY7RkTeAQJmaRa1ngxqt_LH2RI3r1HEU4XiPJm90KIr/exec';
             
-            try {
-                // Fetch dashboard stats
-                const statsResponse = await makeAdminRequest('get_stats');
-                if (statsResponse.result === 'success') {
-                    updateDashboardStats(statsResponse.data);
-                }
-                
-                // Fetch recent submissions
-                const submissionsResponse = await makeAdminRequest('get_recent_submissions', { limit: 5 });
-                if (submissionsResponse.result === 'success') {
-                    updateRecentSubmissions(submissionsResponse.data);
-                }
-                
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-                alert('Failed to load dashboard data');
-            } finally {
-                hideLoading();
-            }
-        }
-        
-        // Update dashboard statistics
-        function updateDashboardStats(data) {
-            document.getElementById('totalSubmissions').textContent = data.totalSubmissions;
-            document.getElementById('sentEmails').textContent = data.sentEmails;
-            document.getElementById('failedEmails').textContent = data.failedEmails;
-            document.getElementById('pendingEmails').textContent = data.pendingEmails;
-        }
-        
-        // Update recent submissions table
-        function updateRecentSubmissions(submissions) {
-            const tbody = document.querySelector('#recentSubmissionsTable tbody');
-            tbody.innerHTML = '';
-            
-            submissions.forEach(sub => {
-                const row = document.createElement('tr');
-                
-                // Format date
-                const date = new Date(sub.timestamp);
-                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                
-                // Status badge
-                let statusBadge;
-                if (sub.status === 'Sent') {
-                    statusBadge = '<span class="badge bg-success">Sent</span>';
-                } else if (sub.status === 'Failed') {
-                    statusBadge = '<span class="badge bg-danger">Failed</span>';
-                } else {
-                    statusBadge = '<span class="badge bg-warning text-dark">Pending</span>';
-                }
-                
-                row.innerHTML = `
-                    <td>${sub.fullName}</td>
-                    <td>${sub.courseCategory}</td>
-                    <td>${formattedDate}</td>
-                    <td>${statusBadge}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </td>
-                `;
-                
-                tbody.appendChild(row);
-            });
-        }
-        
-        // Load a specific section
-        async function loadSection(section) {
-            showLoading();
-            
-            try {
-                // Hide all sections
-                document.querySelectorAll('[id$="Section"]').forEach(el => {
-                    el.style.display = 'none';
-                });
-                
-                // Show selected section
-                document.getElementById(`${section}Section`).style.display = 'block';
-                
-                // Update active nav link
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                document.querySelector(`.nav-link[data-section="${section}"]`).classList.add('active');
-                
-                // Load section-specific data
-                if (section === 'submissions') {
-                    await loadAllSubmissions();
-                } else if (section === 'analytics') {
-                    await loadAnalyticsData();
-                }
-                
-            } catch (error) {
-                console.error(`Error loading ${section} section:`, error);
-                alert(`Failed to load ${section} data`);
-            } finally {
-                hideLoading();
-            }
-        }
-        
-        // Make authenticated admin request
-        async function makeAdminRequest(action, data = {}) {
-            if (!sessionToken) {
-                handleLogout();
-                throw new Error('No active session');
-            }
-            
-            const response = await fetch(SCRIPT_URL, {
+            // Send request to Google Apps Script
+            fetch(scriptURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    action: action,
-                    sessionToken: sessionToken,
-                    ...data
-                })
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update stats
+                document.getElementById('totalCoupons').textContent = data.totalCoupons || 0;
+                document.getElementById('successEnrollments').textContent = data.successEnrollments || 0;
+                document.getElementById('popularCourse').textContent = data.popularCourse || '-';
+                document.getElementById('conversionRate').textContent = data.conversionRate || '0%';
+                
+                // Update table
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+                
+                if (data.rows && data.rows.length > 0) {
+                    data.rows.forEach(row => {
+                        const tr = document.createElement('tr');
+                        
+                        // Format date
+                        const date = new Date(row.timestamp);
+                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                        
+                        // Determine status badge
+                        let statusBadge = '';
+                        if (row.emailSent === 'Sent') {
+                            statusBadge = '<span class="badge badge-success">Sent</span>';
+                        } else if (row.emailSent === 'Pending') {
+                            statusBadge = '<span class="badge badge-warning">Pending</span>';
+                        } else {
+                            statusBadge = '<span class="badge badge-danger">Failed</span>';
+                        }
+                        
+                        tr.innerHTML = `
+                            <td>${formattedDate}</td>
+                            <td>${row.fullName}</td>
+                            <td>${row.email}</td>
+                            <td>${row.mobile}</td>
+                            <td>${row.courseName}</td>
+                            <td>${row.courseCategory}</td>
+                            <td>${row.couponCode}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm view-details" data-id="${row.email}">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(tr);
+                    });
+                    
+                    // Add event listeners to view buttons
+                    document.querySelectorAll('.view-details').forEach(button => {
+                        button.addEventListener('click', function() {
+                            viewStudentDetails(this.getAttribute('data-id'));
+                        });
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 2rem;">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-inbox"></i>
+                                    </div>
+                                    <h3 class="empty-state-title">No Data Found</h3>
+                                    <p class="empty-state-text">No coupon data matches your current filters. Try adjusting your search criteria.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                // Update pagination
+                totalRows = data.totalRows || 0;
+                updatePagination();
+                
+                // Hide loading state
+                document.getElementById('tableLoading').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.getElementById('tableLoading').style.display = 'none';
+                
+                // Show error in table
+                document.getElementById('tableBody').innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 2rem; color: var(--danger);">
+                            Error loading data. Please try again.
+                        </td>
+                    </tr>
+                `;
             });
+        }
+        
+        // Function to update pagination controls
+        function updatePagination() {
+            const startRow = (currentPage - 1) * rowsPerPage + 1;
+            const endRow = Math.min(currentPage * rowsPerPage, totalRows);
             
-            return await response.json();
+            document.getElementById('paginationInfo').textContent = 
+                `Showing ${startRow} to ${endRow} of ${totalRows} entries`;
+            
+            // Disable/enable previous button
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            
+            // Disable/enable next button
+            document.getElementById('nextPage').disabled = 
+                currentPage * rowsPerPage >= totalRows;
         }
         
-        // Show loading overlay
-        function showLoading() {
-            loadingOverlay.style.display = 'flex';
+        // Function to view student details
+        function viewStudentDetails(email) {
+            const studentModal = document.getElementById('studentModal');
+            const studentDetails = document.getElementById('studentDetails');
+            const studentLoading = document.getElementById('studentLoading');
+            
+            // Show loading state
+            studentLoading.style.display = 'flex';
+            studentDetails.innerHTML = '';
+            studentModal.classList.add('active');
+            
+            // Prepare request data
+            const requestData = {
+                action: 'getStudentDetails',
+                email: email
+            };
+            
+            // Your Google Apps Script deployment URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwRsj7a1hMWDkTHKm9TiDy-5chDk8dlnfomyDL55MomL4L-fliuf9QM8P4VOIvAZr2Apg/exec';
+            
+            // Send request to Google Apps Script
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading state
+                studentLoading.style.display = 'none';
+                
+                if (data.error) {
+                    studentDetails.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--danger);">
+                            ${data.error}
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Format date
+                const date = new Date(data.timestamp);
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                
+                // Format email sent date if available
+                let emailSentDate = 'Not sent';
+                if (data.emailSentDate) {
+                    const sentDate = new Date(data.emailSentDate);
+                    emailSentDate = sentDate.toLocaleDateString() + ' ' + sentDate.toLocaleTimeString();
+                }
+                
+                // Determine status badge
+                let statusBadge = '';
+                if (data.emailSent === 'Sent') {
+                    statusBadge = '<span class="badge badge-success">Sent</span>';
+                } else if (data.emailSent === 'Pending') {
+                    statusBadge = '<span class="badge badge-warning">Pending</span>';
+                } else {
+                    statusBadge = '<span class="badge badge-danger">Failed</span>';
+                }
+                
+                // Create student details HTML
+                studentDetails.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary);">Student Information</h3>
+                            <div style="display: grid; grid-template-columns: max-content 1fr; gap: 0.75rem;">
+                                <div style="font-weight: 500;">Full Name:</div>
+                                <div>${data.fullName}</div>
+                                <div style="font-weight: 500;">Email:</div>
+                                <div>${data.email}</div>
+                                <div style="font-weight: 500;">Mobile:</div>
+                                <div>${data.mobile}</div>
+                                <div style="font-weight: 500;">Request Date:</div>
+                                <div>${formattedDate}</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary);">Course Information</h3>
+                            <div style="display: grid; grid-template-columns: max-content 1fr; gap: 0.75rem;">
+                                <div style="font-weight: 500;">Course Name:</div>
+                                <div>${data.courseName}</div>
+                                <div style="font-weight: 500;">Category:</div>
+                                <div>${data.courseCategory}</div>
+                                <div style="font-weight: 500;">Coupon Code:</div>
+                                <div>${data.couponCode}</div>
+                                <div style="font-weight: 500;">Status:</div>
+                                <div>${statusBadge}</div>
+                                <div style="font-weight: 500;">Email Sent:</div>
+                                <div>${emailSentDate}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: var(--light); padding: 1rem; border-radius: var(--radius);">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--primary);">Email History</h3>
+                        <div style="font-size: 0.9rem;">
+                            ${data.emailHistory || 'No email history available.'}
+                        </div>
+                    </div>
+                `;
+                
+                // Set email for resend button
+                document.getElementById('resendCouponBtn').setAttribute('data-email', data.email);
+            })
+            .catch(error => {
+                console.error('Error loading student details:', error);
+                studentLoading.style.display = 'none';
+                studentDetails.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--danger);">
+                        Error loading student details. Please try again.
+                    </div>
+                `;
+            });
         }
         
-        // Hide loading overlay
-        function hideLoading() {
-            loadingOverlay.style.display = 'none';
+        // Function to export data
+        function exportData() {
+            // Get export options
+            const format = document.getElementById('exportFormat').value;
+            const startDate = document.getElementById('exportStartDate').value;
+            const endDate = document.getElementById('exportEndDate').value;
+            
+            // Prepare request data
+            const requestData = {
+                action: 'exportData',
+                format: format,
+                startDate: startDate,
+                endDate: endDate
+            };
+            
+            // Your Google Apps Script deployment URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwl7x5LAg4qTyvwHrPdKgnwTbY7RkTeAQJmaRa1ngxqt_LH2RI3r1HEU4XiPJm90KIr/exec';
+            
+            // Show loading state
+            const exportBtn = document.getElementById('confirmExportBtn');
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+            exportBtn.disabled = true;
+            
+            // Send request to Google Apps Script
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Export failed');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Set filename based on format and date range
+                let filename = 'PW_Coupon_Data_';
+                filename += startDate + '_to_' + endDate;
+                
+                if (format === 'csv') {
+                    filename += '.csv';
+                } else if (format === 'excel') {
+                    filename += '.xlsx';
+                } else {
+                    filename += '.pdf';
+                }
+                
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                // Close modal
+                document.getElementById('exportModal').classList.remove('active');
+            })
+            .catch(error => {
+                console.error('Error exporting data:', error);
+                alert('Export failed. Please try again.');
+            })
+            .finally(() => {
+                // Restore button state
+                exportBtn.innerHTML = originalText;
+                exportBtn.disabled = false;
+            });
         }
+        
+        // Event listener for resend coupon button
+        document.getElementById('resendCouponBtn').addEventListener('click', function() {
+            const email = this.getAttribute('data-email');
+            if (!email) return;
+            
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            this.disabled = true;
+            
+            // Prepare request data
+            const requestData = {
+                action: 'resendCoupon',
+                email: email
+            };
+            
+            // Your Google Apps Script deployment URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwl7x5LAg4qTyvwHrPdKgnwTbY7RkTeAQJmaRa1ngxqt_LH2RI3r1HEU4XiPJm90KIr/exec';
+            
+            // Send request to Google Apps Script
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Coupon resent successfully!');
+                    // Refresh student details
+                    viewStudentDetails(email);
+                } else {
+                    alert('Failed to resend coupon: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error resending coupon:', error);
+                alert('Failed to resend coupon. Please try again.');
+            })
+            .finally(() => {
+                // Restore button state
+                this.innerHTML = originalText;
+                this.disabled = false;
+            });
+        });
     </script>
 </body>
 </html>
