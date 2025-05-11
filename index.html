@@ -42,7 +42,6 @@
             color: var(--text);
             background-color: var(--bg);
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
 
         /* Login Page Styles */
@@ -214,17 +213,6 @@
             color: var(--primary);
         }
         
-        /* Mobile Menu Button */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
         /* Sidebar */
         .dashboard-container {
             display: flex;
@@ -240,8 +228,6 @@
             position: sticky;
             top: 70px;
             height: calc(100vh - 70px);
-            overflow-y: auto;
-            z-index: 90;
         }
         
         .sidebar-menu {
@@ -285,7 +271,6 @@
             flex: 1;
             padding: 2rem;
             background-color: var(--bg);
-            transition: var(--transition);
         }
         
         .page-header {
@@ -779,22 +764,6 @@
             color: var(--danger);
         }
         
-        /* Report Filters */
-        .report-filters {
-            background-color: var(--white);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow);
-        }
-        
-        .report-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -811,25 +780,35 @@
         }
         
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
+            .dashboard-container {
+                flex-direction: column;
             }
             
             .sidebar {
-                position: fixed;
-                top: 70px;
-                left: -250px;
-                height: calc(100vh - 70px);
-                z-index: 1000;
-                transition: transform 0.3s ease;
+                width: 100%;
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem 0;
             }
             
-            .sidebar.active {
-                transform: translateX(250px);
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+            
+            .sidebar-menu li {
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+            
+            .sidebar-menu li a {
+                padding: 0.75rem 1rem;
             }
             
             .main-content {
-                margin-left: 0;
                 padding: 1.5rem;
             }
             
@@ -841,15 +820,6 @@
             .form-row {
                 flex-direction: column;
                 gap: 1rem;
-            }
-            
-            .date-range-picker {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .date-range-picker .form-control {
-                max-width: 100%;
             }
         }
         
@@ -878,6 +848,15 @@
             
             .btn {
                 width: 100%;
+            }
+            
+            .date-range-picker {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .date-range-picker .form-control {
+                max-width: 100%;
             }
         }
     </style>
@@ -918,10 +897,6 @@
         <!-- Header -->
         <header>
             <div class="container header-container">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
                 <a href="#" class="logo">
                     <i class="fas fa-tag logo-icon"></i>
                     <span>PW Coupon Admin</span>
@@ -942,7 +917,7 @@
         <!-- Dashboard Layout -->
         <div class="dashboard-container">
             <!-- Sidebar -->
-            <div class="sidebar" id="sidebar">
+            <div class="sidebar">
                 <ul class="sidebar-menu">
                     <li>
                         <a href="#" class="active" data-tab="dashboard">
@@ -972,7 +947,7 @@
             </div>
 
             <!-- Main Content -->
-            <div class="main-content" id="mainContent">
+            <div class="main-content">
                 <!-- Dashboard Tab -->
                 <div class="tab-content active" id="dashboard-tab">
                     <div class="page-header">
@@ -1367,71 +1342,6 @@
         </div>
     </div>
 
-    <!-- Report Filters Modal -->
-    <div class="modal-overlay" id="reportFiltersModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Generate Report</h3>
-                <button class="close-btn" id="closeReportFiltersModal">&times;</button>
-            </div>
-            
-            <div class="modal-body">
-                <div class="report-filters">
-                    <h3 class="report-title">Report Filters</h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Report Type</label>
-                        <select class="form-control" id="reportType">
-                            <option value="summary">Summary Report</option>
-                            <option value="detailed">Detailed Report</option>
-                            <option value="custom">Custom Report</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="reportStartDate">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="reportEndDate">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Course Category</label>
-                        <select class="form-control" id="reportCourseCategory">
-                            <option value="all">All Categories</option>
-                            <!-- Options will be loaded here -->
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Include Charts</label>
-                        <select class="form-control" id="reportIncludeCharts">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Include Student Details</label>
-                        <select class="form-control" id="reportIncludeStudents">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelReportBtn">Cancel</button>
-                <button class="btn btn-primary" id="generateReportBtnModal">Generate Report</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Loading Modal -->
     <div class="modal-overlay" id="loadingModal">
         <div class="modal-container" style="max-width: 400px; text-align: center;">
@@ -1506,11 +1416,6 @@
             // Logout button
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 handleLogout();
-            });
-            
-            // Menu toggle
-            document.getElementById('menuToggle').addEventListener('click', function() {
-                document.getElementById('sidebar').classList.toggle('active');
             });
         });
         
@@ -1696,9 +1601,6 @@
                     // Show selected tab content
                     const tabId = this.getAttribute('data-tab') + '-tab';
                     document.getElementById(tabId).classList.add('active');
-                    
-                    // Close mobile menu if open
-                    document.getElementById('sidebar').classList.remove('active');
                 });
             });
             
@@ -1954,18 +1856,6 @@
                         option.textContent = course;
                         courseFilter.appendChild(option);
                     });
-                    
-                    // Also update report filter course options
-                    const reportCourseFilter = document.getElementById('reportCourseCategory');
-                    if (reportCourseFilter) {
-                        reportCourseFilter.innerHTML = '<option value="all">All Categories</option>';
-                        data.courses.forEach(course => {
-                            const option = document.createElement('option');
-                            option.value = course;
-                            option.textContent = course;
-                            reportCourseFilter.appendChild(option);
-                        });
-                    }
                     
                     hideLoading();
                 })
@@ -2439,13 +2329,8 @@
                 });
             });
             
-            // Generate report button
-            document.getElementById('generateReportBtn').addEventListener('click', function() {
-                document.getElementById('reportFiltersModal').classList.add('active');
-            });
-            
-            // Generate report from modal
-            document.getElementById('generateReportBtnModal').addEventListener('click', generatePDFReport);
+            // Generate report
+            document.getElementById('generateReportBtn').addEventListener('click', generatePDFReport);
         }
         
         // Action functions
@@ -2543,74 +2428,39 @@
         function generatePDFReport() {
             showLoading();
             
-            // Get report filters
-            const reportType = document.getElementById('reportType').value;
-            const startDate = document.getElementById('reportStartDate').value;
-            const endDate = document.getElementById('reportEndDate').value;
-            const courseCategory = document.getElementById('reportCourseCategory').value;
-            const includeCharts = document.getElementById('reportIncludeCharts').value === 'yes';
-            const includeStudents = document.getElementById('reportIncludeStudents').value === 'yes';
-            
-            // Prepare parameters
-            const params = new URLSearchParams();
-            params.append('action', 'generateReport');
-            params.append('reportType', reportType);
-            params.append('startDate', startDate);
-            params.append('endDate', endDate);
-            params.append('courseCategory', courseCategory);
-            params.append('includeCharts', includeCharts);
-            params.append('includeStudents', includeStudents);
-            
-            // Close filters modal
-            closeAllModals();
-            
-            // Fetch report data
-            fetch(scriptURL + '?' + params.toString())
+            fetch(scriptURL + '?action=getReportData')
                 .then(response => response.json())
                 .then(data => {
                     // Initialize jsPDF
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
                     
-                    // Set report title
+                    // Add title
                     doc.setFontSize(20);
                     doc.setTextColor(40, 40, 40);
                     doc.text('Physics Wallah Coupon System Report', 105, 20, { align: 'center' });
                     
-                    // Add date range
+                    // Add date
                     doc.setFontSize(12);
-                    let dateRangeText = 'All Time';
-                    if (startDate && endDate) {
-                        dateRangeText = `From ${new Date(startDate).toLocaleDateString()} to ${new Date(endDate).toLocaleDateString()}`;
-                    }
-                    doc.text(`Date Range: ${dateRangeText}`, 105, 30, { align: 'center' });
-                    
-                    // Add course filter
-                    if (courseCategory !== 'all') {
-                        doc.text(`Course Category: ${courseCategory}`, 105, 36, { align: 'center' });
-                    }
-                    
-                    // Add generated date
-                    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 42, { align: 'center' });
+                    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 30, { align: 'center' });
                     
                     // Add summary section
                     doc.setFontSize(16);
-                    doc.text('Summary Statistics', 14, 55);
+                    doc.text('Summary Statistics', 14, 45);
                     doc.setFontSize(12);
                     
                     // Summary data
                     const summaryData = [
-                        ['Total Coupons Sent', data.summary.totalCoupons],
-                        ['Successful Emails', data.summary.successEmails],
-                        ['Failed Emails', data.summary.failedEmails],
-                        ['Pending Emails', data.summary.pendingEmails],
-                        ['Top Course', `${data.summary.topCourse.name} (${data.summary.topCourse.count})`],
-                        ['Conversion Rate', `${data.summary.conversionRate}%`]
+                        ['Total Coupons Sent', data.totalCoupons],
+                        ['Successful Emails', data.successEmails],
+                        ['Failed Emails', data.failedEmails],
+                        ['Pending Emails', data.pendingEmails],
+                        ['Top Course', `${data.topCourse.name} (${data.topCourse.count})`]
                     ];
                     
                     // Add summary table
                     doc.autoTable({
-                        startY: 60,
+                        startY: 50,
                         head: [['Metric', 'Value']],
                         body: summaryData,
                         theme: 'grid',
@@ -2620,90 +2470,39 @@
                         }
                     });
                     
-                    // Add charts if enabled
-                    if (includeCharts && data.charts) {
-                        // Add trends chart
-                        doc.setFontSize(16);
-                        doc.text('Coupon Trends', 14, doc.autoTable.previous.finalY + 15);
-                        
-                        const trendsData = data.charts.trends.map(item => [item.date, item.count]);
-                        doc.autoTable({
-                            startY: doc.autoTable.previous.finalY + 20,
-                            head: [['Date', 'Coupons Sent']],
-                            body: trendsData,
-                            theme: 'grid',
-                            headStyles: {
-                                fillColor: [26, 26, 26],
-                                textColor: 255
-                            }
-                        });
-                        
-                        // Add courses chart
-                        doc.setFontSize(16);
-                        doc.text('Course Popularity', 14, doc.autoTable.previous.finalY + 15);
-                        
-                        const coursesData = data.charts.courses.map(item => [item.name, item.count]);
-                        doc.autoTable({
-                            startY: doc.autoTable.previous.finalY + 20,
-                            head: [['Course', 'Coupons Sent']],
-                            body: coursesData,
-                            theme: 'grid',
-                            headStyles: {
-                                fillColor: [26, 26, 26],
-                                textColor: 255
-                            }
-                        });
-                        
-                        // Add conversion chart
-                        doc.setFontSize(16);
-                        doc.text('Conversion Rates', 14, doc.autoTable.previous.finalY + 15);
-                        
-                        const conversionData = [
-                            ['Successful', data.summary.successEmails],
-                            ['Failed', data.summary.failedEmails],
-                            ['Pending', data.summary.pendingEmails]
-                        ];
-                        
-                        doc.autoTable({
-                            startY: doc.autoTable.previous.finalY + 20,
-                            head: [['Status', 'Count']],
-                            body: conversionData,
-                            theme: 'grid',
-                            headStyles: {
-                                fillColor: [26, 26, 26],
-                                textColor: 255
-                            }
-                        });
-                    }
+                    // Add charts section
+                    doc.setFontSize(16);
+                    doc.text('Coupon Trends', 14, doc.autoTable.previous.finalY + 15);
                     
-                    // Add student details if enabled
-                    if (includeStudents && data.students) {
-                        doc.setFontSize(16);
-                        doc.text('Student Details', 14, doc.autoTable.previous.finalY + 15);
-                        
-                        const studentData = data.students.map(student => [
-                            new Date(student.timestamp).toLocaleDateString(),
-                            student.fullName,
-                            student.email,
-                            student.courseCategory,
-                            student.couponCode,
-                            student.emailSent
-                        ]);
-                        
-                        doc.autoTable({
-                            startY: doc.autoTable.previous.finalY + 20,
-                            head: [['Date', 'Name', 'Email', 'Course', 'Coupon Code', 'Status']],
-                            body: studentData,
-                            theme: 'grid',
-                            headStyles: {
-                                fillColor: [26, 26, 26],
-                                textColor: 255
-                            },
-                            styles: {
-                                fontSize: 8
-                            }
-                        });
-                    }
+                    // Add trends data
+                    const trendsData = data.trends.map(item => [item.date, item.count]);
+                    doc.autoTable({
+                        startY: doc.autoTable.previous.finalY + 20,
+                        head: [['Date', 'Coupons Sent']],
+                        body: trendsData,
+                        theme: 'grid',
+                        headStyles: {
+                            fillColor: [26, 26, 26],
+                            textColor: 255
+                        }
+                    });
+                    
+                    // Add courses section
+                    doc.setFontSize(16);
+                    doc.text('Course Popularity', 14, doc.autoTable.previous.finalY + 15);
+                    
+                    // Add courses data
+                    const coursesData = data.courses.map(item => [item.name, item.count]);
+                    doc.autoTable({
+                        startY: doc.autoTable.previous.finalY + 20,
+                        head: [['Course', 'Coupons Sent']],
+                        body: coursesData,
+                        theme: 'grid',
+                        headStyles: {
+                            fillColor: [26, 26, 26],
+                            textColor: 255
+                        }
+                    });
                     
                     // Add footer
                     doc.setFontSize(10);
@@ -2711,7 +2510,7 @@
                     doc.text('© Physics Wallah - Confidential Report', 105, doc.internal.pageSize.height - 10, { align: 'center' });
                     
                     // Save the PDF
-                    doc.save(`PW_Coupon_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+                    doc.save('PW_Coupon_Report.pdf');
                     
                     hideLoading();
                 })
