@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PW Coupon Admin Dashboard - Track coupon usage and student enrollments">
-    <title>PW Coupon Admin Dashboard</title>
+    <title>PW Coupon System - Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,15 +83,21 @@
             color: var(--accent);
         }
         
-        .user-profile {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
             background-color: var(--light);
             display: flex;
@@ -103,23 +108,33 @@
             border: 1px solid var(--border);
         }
         
-        /* Main Layout */
-        .admin-layout {
-            display: flex;
-            min-height: calc(100vh - 68px);
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logout-btn:hover {
+            color: var(--primary);
         }
         
         /* Sidebar */
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+        
         .sidebar {
-            width: 240px;
+            width: 250px;
             background-color: var(--white);
             border-right: 1px solid var(--border);
             padding: 1.5rem 0;
             transition: var(--transition);
             position: sticky;
-            top: 68px;
-            height: calc(100vh - 68px);
-            overflow-y: auto;
+            top: 70px;
+            height: calc(100vh - 70px);
         }
         
         .sidebar-menu {
@@ -133,33 +148,29 @@
         .sidebar-menu li a {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
             padding: 0.75rem 1.5rem;
             color: var(--text);
             text-decoration: none;
             transition: var(--transition);
-            font-size: 0.95rem;
             font-weight: 500;
+            font-size: 0.95rem;
+            gap: 0.75rem;
         }
         
-        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+        .sidebar-menu li a:hover {
             background-color: var(--light);
             color: var(--primary);
         }
         
-        .sidebar-menu li a i {
-            width: 20px;
-            text-align: center;
+        .sidebar-menu li a.active {
+            background-color: rgba(0,0,0,0.05);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
         }
         
-        .sidebar-menu-title {
-            padding: 0.75rem 1.5rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray);
-            font-weight: 600;
-            margin-top: 1.5rem;
+        .sidebar-menu li a i {
+            width: 1.25rem;
+            text-align: center;
         }
         
         /* Main Content */
@@ -243,235 +254,299 @@
         }
         
         /* Cards */
+        .card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
         
         .stat-card {
-            background: var(--white);
+            background-color: var(--white);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
             padding: 1.5rem;
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
         
-        .stat-card-title {
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-title {
             font-size: 0.9rem;
             color: var(--gray);
             margin-bottom: 0.5rem;
-            font-weight: 500;
         }
         
-        .stat-card-value {
+        .stat-value {
             font-size: 1.75rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
         
-        .stat-card-change {
+        .stat-change {
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.25rem;
         }
         
-        .stat-card-change.positive {
+        .stat-change.up {
             color: var(--success);
         }
         
-        .stat-card-change.negative {
+        .stat-change.down {
             color: var(--danger);
+        }
+        
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        .table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tr:hover td {
+            background-color: rgba(0,0,0,0.02);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-badge.warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-badge.danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: var(--white);
+            color: var(--text);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        /* Date Range Picker */
+        .date-range-picker {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .date-range-picker .form-control {
+            max-width: 180px;
+        }
+        
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         /* Filters */
         .filters {
             display: flex;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
         
         .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .filter-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-        
-        .filter-select, .filter-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-family: inherit;
-            font-size: 0.95rem;
-            background-color: var(--white);
-            transition: var(--transition);
-        }
-        
-        .filter-select:focus, .filter-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
-            outline: none;
-        }
-        
-        /* Data Table */
-        .data-table-container {
-            background-color: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .data-table thead th {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .data-table tbody td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.95rem;
-        }
-        
-        .data-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .data-table tbody tr:hover {
-            background-color: var(--light);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.35rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .badge-success {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: var(--success);
-        }
-        
-        .badge-warning {
-            background-color: rgba(255, 193, 7, 0.1);
-            color: var(--warning);
-        }
-        
-        .badge-danger {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: var(--danger);
-        }
-        
-        .badge-info {
-            background-color: rgba(23, 162, 184, 0.1);
-            color: var(--info);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         /* Pagination */
         .pagination {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            padding: 1rem 0;
-        }
-        
-        .pagination-info {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-        
-        .pagination-controls {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        /* Charts */
-        .chart-container {
-            background-color: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .chart-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        .chart-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .chart-placeholder {
-            height: 300px;
-            background-color: var(--light);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            color: var(--gray);
+            gap: 0.5rem;
+            margin-top: 2rem;
         }
         
-        /* Date Range Picker */
-        .date-range-picker {
+        .page-item {
+            display: inline-flex;
+        }
+        
+        .page-link {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        
+        .page-link:hover {
+            background-color: var(--light);
+        }
+        
+        .page-link.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 1rem;
-            background-color: var(--white);
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
         }
         
-        .date-range-picker input {
-            border: none;
-            font-family: inherit;
-            font-size: 0.9rem;
-            background: transparent;
-            padding: 0.25rem 0;
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(40, 167, 69, 0.2);
         }
         
-        .date-range-picker input:focus {
-            outline: none;
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.2);
         }
         
-        .date-range-divider {
-            color: var(--gray);
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 193, 7, 0.2);
         }
         
         /* Modal Styles */
@@ -508,6 +583,8 @@
             overflow: hidden;
             border: 1px solid var(--border);
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-overlay.active .modal-container {
@@ -550,51 +627,18 @@
         }
         
         .modal-footer {
-            padding: 1rem 2rem;
+            padding: 1.5rem;
             border-top: 1px solid var(--border);
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
         }
         
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-        
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            display: block;
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-        
-        .form-control {
-            border-radius: 8px;
-            padding: 0.85rem 1rem;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-            width: 100%;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background-color: var(--white);
-            color: var(--text);
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
-            outline: none;
-        }
-        
         /* Loading State */
         .loading-state {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: none;
+            text-align: center;
             padding: 2rem;
-            min-height: 200px;
         }
         
         .loading-spinner {
@@ -604,58 +648,42 @@
             border-left-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .loading-text {
+            color: var(--text);
+            font-weight: 500;
+            margin-bottom: 0;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-        
-        .empty-state-icon {
-            font-size: 3rem;
-            color: var(--gray);
-            margin-bottom: 1rem;
-        }
-        
-        .empty-state-title {
-            font-size: 1.25rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-        
-        .empty-state-text {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
         /* Responsive Styles */
-        @media (max-width: 1200px) {
+        @media (max-width: 992px) {
             .sidebar {
-                width: 200px;
+                width: 220px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             }
         }
         
-        @media (max-width: 992px) {
-            .admin-layout {
+        @media (max-width: 768px) {
+            .dashboard-container {
                 flex-direction: column;
             }
             
             .sidebar {
                 width: 100%;
-                height: auto;
                 position: static;
-                padding: 1rem 0;
+                height: auto;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
+                padding: 1rem 0;
             }
             
             .sidebar-menu {
@@ -666,25 +694,38 @@
             
             .sidebar-menu li {
                 margin-bottom: 0;
-                margin-right: 0.5rem;
-            }
-            
-            .sidebar-menu li a {
                 white-space: nowrap;
             }
             
-            .sidebar-menu-title {
-                display: none;
+            .sidebar-menu li a {
+                padding: 0.75rem 1rem;
             }
             
             .main-content {
                 padding: 1.5rem;
             }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
         
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
+        @media (max-width: 576px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .header-right {
+                flex-direction: column;
+                gap: 0.5rem;
             }
             
             .page-header {
@@ -695,28 +736,20 @@
             
             .page-actions {
                 width: 100%;
-                justify-content: flex-end;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .filters {
                 flex-direction: column;
-                gap: 1rem;
             }
             
-            .filter-group {
-                min-width: 100%;
+            .btn {
+                width: 100%;
             }
             
-            .pagination {
+            .date-range-picker {
                 flex-direction: column;
-                gap: 1rem;
                 align-items: flex-start;
+            }
+            
+            .date-range-picker .form-control {
+                max-width: 100%;
             }
         }
     </style>
@@ -730,793 +763,1675 @@
                 <span>PW Coupon Admin</span>
             </a>
             
-            <div class="user-profile">
-                <span>Admin User</span>
-                <div class="user-avatar">AU</div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-avatar" id="userInitials">AD</div>
+                    <span id="userEmail">admin@example.com</span>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Layout -->
-    <div class="admin-layout">
+    <!-- Dashboard Layout -->
+    <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
             <ul class="sidebar-menu">
-                <li class="sidebar-menu-title">Dashboard</li>
-                <li><a href="#" class="active"><i class="fas fa-chart-line"></i> Analytics</a></li>
-                <li><a href="#"><i class="fas fa-tag"></i> Coupons</a></li>
-                <li><a href="#"><i class="fas fa-users"></i> Students</a></li>
-                <li><a href="#"><i class="fas fa-book"></i> Courses</a></li>
-                
-                <li class="sidebar-menu-title">Settings</li>
-                <li><a href="#"><i class="fas fa-envelope"></i> Email Templates</a></li>
-                <li><a href="#"><i class="fas fa-user-shield"></i> Admin Users</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> System Settings</a></li>
+                <li>
+                    <a href="#" class="active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="coupons">
+                        <i class="fas fa-tags"></i>
+                        <span>Coupons</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="users">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
             </ul>
         </div>
-        
+
         <!-- Main Content -->
         <div class="main-content">
-            <div class="page-header">
-                <h1 class="page-title">Coupon Analytics</h1>
-                <div class="page-actions">
-                    <button class="btn btn-secondary" id="exportBtn">
-                        <i class="fas fa-download"></i> Export Data
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard-tab">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="refreshDashboard">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Coupons Sent</div>
+                        <div class="stat-value" id="totalCoupons">0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="couponsChange">0%</span> from last week
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-title">Successful Emails</div>
+                        <div class="stat-value" id="successEmails">0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="emailsChange">0%</span> from last week
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-title">Top Course</div>
+                        <div class="stat-value" id="topCourse">-</div>
+                        <div class="stat-title" id="topCourseCount">0 enrollments</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-title">Recent Activity</div>
+                        <div class="stat-value" id="recentActivity">0</div>
+                        <div class="stat-title">coupons today</div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Coupon Usage Trends</h2>
+                        <div class="date-range-picker">
+                            <select class="form-control" id="timeRange">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="90">Last 90 Days</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                            <input type="date" class="form-control" id="startDate" style="display: none;">
+                            <input type="date" class="form-control" id="endDate" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="couponsChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Recent Coupons -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Coupon Requests</h2>
+                        <button class="btn btn-secondary btn-sm" id="viewAllCoupons">
+                            <i class="fas fa-list"></i> View All
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentCouponsTable">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coupons Tab -->
+            <div class="tab-content" id="coupons-tab">
+                <div class="page-header">
+                    <h1 class="page-title">Coupon Management</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="addCouponBtn">
+                            <i class="fas fa-plus"></i> Add Coupon
+                        </button>
+                        <button class="btn btn-secondary" id="exportCouponsBtn">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label class="form-label">Status:</label>
+                        <select class="form-control" id="filterStatus">
+                            <option value="all">All</option>
+                            <option value="sent">Sent</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="form-label">Course:</label>
+                        <select class="form-control" id="filterCourse">
+                            <option value="all">All Courses</option>
+                            <!-- Course options will be loaded here -->
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="form-label">Date Range:</label>
+                        <input type="date" class="form-control" id="filterStartDate">
+                        <span>to</span>
+                        <input type="date" class="form-control" id="filterEndDate">
+                    </div>
+                    
+                    <button class="btn btn-secondary btn-sm" id="applyFiltersBtn">
+                        <i class="fas fa-filter"></i> Apply
                     </button>
-                    <button class="btn btn-primary" id="refreshBtn">
-                        <i class="fas fa-sync-alt"></i> Refresh
+                    
+                    <button class="btn btn-secondary btn-sm" id="resetFiltersBtn">
+                        <i class="fas fa-redo"></i> Reset
                     </button>
                 </div>
-            </div>
-            
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-card-title">Total Coupons Sent</div>
-                    <div class="stat-card-value" id="totalCoupons">0</div>
-                    <div class="stat-card-change positive">
-                        <i class="fas fa-arrow-up"></i> 12% from last month
+                
+                <!-- Coupons Table -->
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Course</th>
+                                    <th>Coupon Code</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponsTable">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-card-title">Successful Enrollments</div>
-                    <div class="stat-card-value" id="successEnrollments">0</div>
-                    <div class="stat-card-change positive">
-                        <i class="fas fa-arrow-up"></i> 8% from last month
+                    
+                    <!-- Pagination -->
+                    <div class="pagination" id="couponsPagination">
+                        <div class="page-item">
+                            <a href="#" class="page-link" data-page="prev">&laquo;</a>
+                        </div>
+                        <!-- Page numbers will be added here -->
+                        <div class="page-item">
+                            <a href="#" class="page-link" data-page="next">&raquo;</a>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-card-title">Most Popular Course</div>
-                    <div class="stat-card-value" id="popularCourse">-</div>
-                    <div class="stat-card-change positive">
-                        <i class="fas fa-arrow-up"></i> 15% of total
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-card-title">Conversion Rate</div>
-                    <div class="stat-card-value" id="conversionRate">0%</div>
-                    <div class="stat-card-change negative">
-                        <i class="fas fa-arrow-down"></i> 2% from last month
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Date Range Picker -->
-            <div class="filters">
-                <div class="filter-group">
-                    <label class="filter-label">Date Range</label>
-                    <div class="date-range-picker">
-                        <input type="date" id="startDate" class="filter-input">
-                        <span class="date-range-divider">to</span>
-                        <input type="date" id="endDate" class="filter-input">
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Time Period</label>
-                    <select id="timePeriod" class="filter-select">
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly" selected>Monthly</option>
-                        <option value="custom">Custom Range</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Course Category</label>
-                    <select id="courseFilter" class="filter-select">
-                        <option value="all">All Categories</option>
-                        <option value="PW NEET">NEET</option>
-                        <option value="PW IIT-JEE">JEE</option>
-                        <option value="PW UPSC">UPSC</option>
-                        <option value="PW GATE">GATE</option>
-                        <option value="PW Banking">Banking</option>
-                        <option value="PW NDA">NDA</option>
-                        <option value="PW CLAT">CLAT</option>
-                        <option value="PW MBA">MBA</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Status</label>
-                    <select id="statusFilter" class="filter-select">
-                        <option value="all">All Statuses</option>
-                        <option value="Sent">Sent</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Failed">Failed</option>
-                    </select>
                 </div>
             </div>
             
-            <!-- Charts -->
-            <div class="chart-container">
-                <div class="chart-header">
-                    <h3 class="chart-title">Coupons Sent Over Time</h3>
-                    <div class="chart-actions">
-                        <button class="btn btn-secondary btn-sm">
-                            <i class="fas fa-download"></i> Export
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analytics-tab">
+                <div class="page-header">
+                    <h1 class="page-title">Analytics & Reports</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="generateReportBtn">
+                            <i class="fas fa-file-pdf"></i> Generate Report
                         </button>
                     </div>
                 </div>
-                <div class="chart-placeholder" id="couponChart">
-                    <i class="fas fa-chart-bar"></i> Chart will load here
+                
+                <div class="tabs">
+                    <div class="tab active" data-analytics-tab="courses">Courses</div>
+                    <div class="tab" data-analytics-tab="time">Time Analysis</div>
+                    <div class="tab" data-analytics-tab="geo">Geographic</div>
+                </div>
+                
+                <div class="tab-content active" id="courses-analytics">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Course Popularity</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="coursesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Course Conversion Rates</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="conversionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="time-analytics">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Daily Activity</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="dailyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Hourly Activity</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="hourlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="geo-analytics">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Geographic Distribution</h2>
+                        </div>
+                        <div class="chart-container">
+                            <div id="map" style="height: 100%; width: 100%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="chart-container">
-                <div class="chart-header">
-                    <h3 class="chart-title">Course Category Distribution</h3>
-                    <div class="chart-actions">
-                        <button class="btn btn-secondary btn-sm">
-                            <i class="fas fa-download"></i> Export
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings-tab">
+                <div class="page-header">
+                    <h1 class="page-title">System Settings</h1>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Email Template</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Email Subject</label>
+                            <input type="text" class="form-control" id="emailSubject" value="Your Exclusive Physics Wallah Discount is Ready">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Body (HTML)</label>
+                            <textarea class="form-control" id="emailBody" rows="12" style="font-family: monospace;">
+<!-- Email template HTML will be loaded here -->
+                            </textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Default Coupon Code</label>
+                            <input type="text" class="form-control" id="defaultCouponCode" value="YUGNA00001">
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i> Save Settings
                         </button>
                     </div>
                 </div>
-                <div class="chart-placeholder" id="categoryChart">
-                    <i class="fas fa-chart-pie"></i> Chart will load here
-                </div>
-            </div>
-            
-            <!-- Data Table -->
-            <div class="data-table-container">
-                <div class="loading-state" id="tableLoading">
-                    <div class="loading-spinner"></div>
-                </div>
                 
-                <table class="data-table" id="couponDataTable">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Student Name</th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Course</th>
-                            <th>Category</th>
-                            <th>Coupon Code</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- Data will be loaded here -->
-                    </tbody>
-                </table>
-                
-                <div class="pagination">
-                    <div class="pagination-info" id="paginationInfo">
-                        Showing 1 to 10 of 0 entries
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">System Configuration</h2>
                     </div>
-                    <div class="pagination-controls">
-                        <button class="btn btn-secondary btn-sm" id="prevPage" disabled>
-                            <i class="fas fa-chevron-left"></i> Previous
-                        </button>
-                        <button class="btn btn-secondary btn-sm" id="nextPage" disabled>
-                            Next <i class="fas fa-chevron-right"></i>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Google Drive Folder URL</label>
+                            <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/your-folder">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Data Retention (Days)</label>
+                            <input type="number" class="form-control" id="dataRetention" value="365">
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="enableNotifications">
+                                <label class="form-check-label" for="enableNotifications">Enable Email Notifications</label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveConfigBtn">
+                            <i class="fas fa-save"></i> Save Configuration
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Student Details Modal -->
-    <div class="modal-overlay" id="studentModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Student Details</h3>
-                <button class="close-btn" id="closeStudentModal">&times;</button>
-            </div>
             
-            <div class="modal-body">
-                <div class="loading-state" id="studentLoading">
-                    <div class="loading-spinner"></div>
-                </div>
-                
-                <div id="studentDetails">
-                    <!-- Student details will be loaded here -->
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="closeStudentModalBtn">Close</button>
-                <button class="btn btn-primary" id="resendCouponBtn">
-                    <i class="fas fa-paper-plane"></i> Resend Coupon
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Export Modal -->
-    <div class="modal-overlay" id="exportModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Export Data</h3>
-                <button class="close-btn" id="closeExportModal">&times;</button>
-            </div>
-            
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Export Format</label>
-                    <select class="form-control" id="exportFormat">
-                        <option value="csv">CSV (Comma Separated Values)</option>
-                        <option value="excel">Excel (XLSX)</option>
-                        <option value="pdf">PDF Document</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Date Range</label>
-                    <div class="date-range-picker">
-                        <input type="date" id="exportStartDate" class="form-control">
-                        <span class="date-range-divider">to</span>
-                        <input type="date" id="exportEndDate" class="form-control">
+            <!-- Users Tab -->
+            <div class="tab-content" id="users-tab">
+                <div class="page-header">
+                    <h1 class="page-title">User Management</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="addUserBtn">
+                            <i class="fas fa-user-plus"></i> Add User
+                        </button>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Columns to Include</label>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Timestamp
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Student Name
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Email
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Mobile
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Course
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Category
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Coupon Code
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Status
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" checked> Email Sent Date
-                        </label>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Last Login</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelExportBtn">Cancel</button>
-                <button class="btn btn-primary" id="confirmExportBtn">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
             </div>
         </div>
     </div>
 
+    <!-- Add Coupon Modal -->
+    <div class="modal-overlay" id="addCouponModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Add New Coupon</h3>
+                <button class="close-btn" id="closeCouponModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="couponForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="couponName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="couponEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="tel" class="form-control" id="couponMobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Course Category</label>
+                            <select class="form-control" id="couponCategory" required>
+                                <!-- Options will be loaded here -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Course Name</label>
+                            <input type="text" class="form-control" id="couponCourseName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Coupon Code</label>
+                            <input type="text" class="form-control" id="couponCode" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Send Email Notification</label>
+                        <select class="form-control" id="couponSendEmail">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelCouponBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveCouponBtn">Save Coupon</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal-overlay" id="addUserModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <button class="close-btn" id="closeUserModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="userName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="userEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="userPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="userConfirmPassword" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <select class="form-control" id="userRole" required>
+                            <option value="admin">Admin</option>
+                            <option value="editor">Editor</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelUserBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveUserBtn">Save User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal-overlay" id="loadingModal">
+        <div class="modal-container" style="max-width: 400px; text-align: center;">
+            <div class="modal-body">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Processing your request...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-container" style="max-width: 400px; text-align: center;">
+            <div class="modal-body">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h4 id="successTitle">Success!</h4>
+                <p id="successMessage">Operation completed successfully.</p>
+                <button class="btn btn-primary" id="successOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal-overlay" id="errorModal">
+        <div class="modal-container" style="max-width: 400px; text-align: center;">
+            <div class="modal-body">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+                <h4 id="errorTitle">Error!</h4>
+                <p id="errorMessage">An error occurred while processing your request.</p>
+                <button class="btn btn-primary" id="errorOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Global variables
+        let currentUser = {};
+        let allCoupons = [];
+        let allCourses = [];
+        let allUsers = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        
+        // Google Apps Script deployment URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwVp8BecSX-NdPH1jbNwKtYZNJCUzhSbOTy4mVifKt0nzwABvSU_QDYP_ydBCHQz4P4/exec';
+        
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Set default dates
-            const today = new Date();
-            const oneMonthAgo = new Date();
-            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+            // Set current user (in a real app, this would come from authentication)
+            currentUser = {
+                name: 'Admin User',
+                email: 'admin@example.com',
+                role: 'admin'
+            };
             
-            document.getElementById('startDate').valueAsDate = oneMonthAgo;
-            document.getElementById('endDate').valueAsDate = today;
-            document.getElementById('exportStartDate').valueAsDate = oneMonthAgo;
-            document.getElementById('exportEndDate').valueAsDate = today;
+            document.getElementById('userInitials').textContent = getInitials(currentUser.name);
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            // Tab navigation
+            setupTabNavigation();
+            
+            // Initialize charts
+            initCharts();
             
             // Load initial data
-            loadData();
+            loadDashboardData();
+            loadCouponsData();
+            loadCoursesData();
+            loadUsersData();
+            loadSettings();
             
-            // Event listeners for filters
-            document.getElementById('timePeriod').addEventListener('change', function() {
-                updateDateRangeBasedOnPeriod();
-                loadData();
-            });
-            
-            document.getElementById('startDate').addEventListener('change', loadData);
-            document.getElementById('endDate').addEventListener('change', loadData);
-            document.getElementById('courseFilter').addEventListener('change', loadData);
-            document.getElementById('statusFilter').addEventListener('change', loadData);
-            
-            // Modal controls
-            const studentModal = document.getElementById('studentModal');
-            const closeStudentModal = document.getElementById('closeStudentModal');
-            const closeStudentModalBtn = document.getElementById('closeStudentModalBtn');
-            
-            closeStudentModal.addEventListener('click', function() {
-                studentModal.classList.remove('active');
-            });
-            
-            closeStudentModalBtn.addEventListener('click', function() {
-                studentModal.classList.remove('active');
-            });
-            
-            // Export modal controls
-            const exportModal = document.getElementById('exportModal');
-            const exportBtn = document.getElementById('exportBtn');
-            const closeExportModal = document.getElementById('closeExportModal');
-            const cancelExportBtn = document.getElementById('cancelExportBtn');
-            
-            exportBtn.addEventListener('click', function() {
-                exportModal.classList.add('active');
-            });
-            
-            closeExportModal.addEventListener('click', function() {
-                exportModal.classList.remove('active');
-            });
-            
-            cancelExportBtn.addEventListener('click', function() {
-                exportModal.classList.remove('active');
-            });
-            
-            document.getElementById('confirmExportBtn').addEventListener('click', exportData);
-            
-            // Refresh button
-            document.getElementById('refreshBtn').addEventListener('click', loadData);
-            
-            // Pagination controls
-            document.getElementById('prevPage').addEventListener('click', function() {
-                currentPage--;
-                loadData();
-            });
-            
-            document.getElementById('nextPage').addEventListener('click', function() {
-                currentPage++;
-                loadData();
-            });
+            // Event listeners
+            setupEventListeners();
         });
         
-        // Global variables
-        let currentPage = 1;
-        const rowsPerPage = 10;
-        let totalRows = 0;
-        
-        // Function to update date range based on selected period
-        function updateDateRangeBasedOnPeriod() {
-            const period = document.getElementById('timePeriod').value;
-            const today = new Date();
-            const startDateInput = document.getElementById('startDate');
-            const endDateInput = document.getElementById('endDate');
-            
-            let startDate = new Date();
-            
-            switch(period) {
-                case 'daily':
-                    // Today only
-                    startDateInput.valueAsDate = today;
-                    endDateInput.valueAsDate = today;
-                    break;
-                case 'weekly':
-                    // Last 7 days
-                    startDate.setDate(today.getDate() - 7);
-                    startDateInput.valueAsDate = startDate;
-                    endDateInput.valueAsDate = today;
-                    break;
-                case 'monthly':
-                    // Last 30 days
-                    startDate.setMonth(today.getMonth() - 1);
-                    startDateInput.valueAsDate = startDate;
-                    endDateInput.valueAsDate = today;
-                    break;
-                case 'custom':
-                    // No change, let user select
-                    break;
-            }
+        // Helper functions
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase();
         }
         
-        // Function to load data from Google Apps Script
-        function loadData() {
-            // Show loading state
-            document.getElementById('tableLoading').style.display = 'flex';
-            document.getElementById('tableBody').innerHTML = '';
-            
-            // Get filter values
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const courseFilter = document.getElementById('courseFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
-            
-            // Prepare request data
-            const requestData = {
-                action: 'getCouponData',
-                startDate: startDate,
-                endDate: endDate,
-                courseFilter: courseFilter,
-                statusFilter: statusFilter,
-                page: currentPage,
-                rowsPerPage: rowsPerPage
-            };
-            
-            // Your Google Apps Script deployment URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwl7x5LAg4qTyvwHrPdKgnwTbY7RkTeAQJmaRa1ngxqt_LH2RI3r1HEU4XiPJm90KIr/exec';
-            
-            // Send request to Google Apps Script
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Update stats
-                document.getElementById('totalCoupons').textContent = data.totalCoupons || 0;
-                document.getElementById('successEnrollments').textContent = data.successEnrollments || 0;
-                document.getElementById('popularCourse').textContent = data.popularCourse || '-';
-                document.getElementById('conversionRate').textContent = data.conversionRate || '0%';
-                
-                // Update table
-                const tableBody = document.getElementById('tableBody');
-                tableBody.innerHTML = '';
-                
-                if (data.rows && data.rows.length > 0) {
-                    data.rows.forEach(row => {
-                        const tr = document.createElement('tr');
-                        
-                        // Format date
-                        const date = new Date(row.timestamp);
-                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                        
-                        // Determine status badge
-                        let statusBadge = '';
-                        if (row.emailSent === 'Sent') {
-                            statusBadge = '<span class="badge badge-success">Sent</span>';
-                        } else if (row.emailSent === 'Pending') {
-                            statusBadge = '<span class="badge badge-warning">Pending</span>';
-                        } else {
-                            statusBadge = '<span class="badge badge-danger">Failed</span>';
-                        }
-                        
-                        tr.innerHTML = `
-                            <td>${formattedDate}</td>
-                            <td>${row.fullName}</td>
-                            <td>${row.email}</td>
-                            <td>${row.mobile}</td>
-                            <td>${row.courseName}</td>
-                            <td>${row.courseCategory}</td>
-                            <td>${row.couponCode}</td>
-                            <td>${statusBadge}</td>
-                            <td>
-                                <button class="btn btn-secondary btn-sm view-details" data-id="${row.email}">
-                                    <i class="fas fa-eye"></i> View
-                                </button>
-                            </td>
-                        `;
-                        
-                        tableBody.appendChild(tr);
-                    });
-                    
-                    // Add event listeners to view buttons
-                    document.querySelectorAll('.view-details').forEach(button => {
-                        button.addEventListener('click', function() {
-                            viewStudentDetails(this.getAttribute('data-id'));
-                        });
-                    });
-                } else {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="9" style="text-align: center; padding: 2rem;">
-                                <div class="empty-state">
-                                    <div class="empty-state-icon">
-                                        <i class="fas fa-inbox"></i>
-                                    </div>
-                                    <h3 class="empty-state-title">No Data Found</h3>
-                                    <p class="empty-state-text">No coupon data matches your current filters. Try adjusting your search criteria.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }
-                
-                // Update pagination
-                totalRows = data.totalRows || 0;
-                updatePagination();
-                
-                // Hide loading state
-                document.getElementById('tableLoading').style.display = 'none';
-            })
-            .catch(error => {
-                console.error('Error loading data:', error);
-                document.getElementById('tableLoading').style.display = 'none';
-                
-                // Show error in table
-                document.getElementById('tableBody').innerHTML = `
-                    <tr>
-                        <td colspan="9" style="text-align: center; padding: 2rem; color: var(--danger);">
-                            Error loading data. Please try again.
-                        </td>
-                    </tr>
-                `;
+        function showLoading() {
+            document.getElementById('loadingModal').classList.add('active');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loadingModal').classList.remove('active');
+        }
+        
+        function showSuccess(title, message) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.add('active');
+        }
+        
+        function showError(title, message) {
+            document.getElementById('errorTitle').textContent = title;
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.add('active');
+        }
+        
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
             });
         }
         
-        // Function to update pagination controls
-        function updatePagination() {
-            const startRow = (currentPage - 1) * rowsPerPage + 1;
-            const endRow = Math.min(currentPage * rowsPerPage, totalRows);
+        // Tab navigation
+        function setupTabNavigation() {
+            // Main tabs
+            document.querySelectorAll('.sidebar-menu li a').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.sidebar-menu li a').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab') + '-tab';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
             
-            document.getElementById('paginationInfo').textContent = 
-                `Showing ${startRow} to ${endRow} of ${totalRows} entries`;
-            
-            // Disable/enable previous button
-            document.getElementById('prevPage').disabled = currentPage <= 1;
-            
-            // Disable/enable next button
-            document.getElementById('nextPage').disabled = 
-                currentPage * rowsPerPage >= totalRows;
+            // Analytics sub-tabs
+            document.querySelectorAll('[data-analytics-tab]').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    document.querySelectorAll('[data-analytics-tab]').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    document.querySelectorAll('.analytics-tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-analytics-tab') + '-analytics';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
         }
         
-        // Function to view student details
-        function viewStudentDetails(email) {
-            const studentModal = document.getElementById('studentModal');
-            const studentDetails = document.getElementById('studentDetails');
-            const studentLoading = document.getElementById('studentLoading');
-            
-            // Show loading state
-            studentLoading.style.display = 'flex';
-            studentDetails.innerHTML = '';
-            studentModal.classList.add('active');
-            
-            // Prepare request data
-            const requestData = {
-                action: 'getStudentDetails',
-                email: email
-            };
-            
-            // Your Google Apps Script deployment URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwRsj7a1hMWDkTHKm9TiDy-5chDk8dlnfomyDL55MomL4L-fliuf9QM8P4VOIvAZr2Apg/exec';
-            
-            // Send request to Google Apps Script
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        // Charts initialization
+        function initCharts() {
+            // Coupons chart
+            const couponsCtx = document.getElementById('couponsChart').getContext('2d');
+            window.couponsChart = new Chart(couponsCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Coupons Sent',
+                        data: [],
+                        borderColor: '#6c63ff',
+                        backgroundColor: 'rgba(108, 99, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
                 },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Hide loading state
-                studentLoading.style.display = 'none';
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Courses chart
+            const coursesCtx = document.getElementById('coursesChart').getContext('2d');
+            window.coursesChart = new Chart(coursesCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Coupons by Course',
+                        data: [],
+                        backgroundColor: '#6c63ff',
+                        borderColor: '#6c63ff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Conversion chart
+            const conversionCtx = document.getElementById('conversionChart').getContext('2d');
+            window.conversionChart = new Chart(conversionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Successful', 'Failed', 'Pending'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: [
+                            '#28a745',
+                            '#dc3545',
+                            '#ffc107'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+            
+            // Daily chart
+            const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+            window.dailyChart = new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Coupons Sent',
+                        data: [],
+                        borderColor: '#6c63ff',
+                        backgroundColor: 'rgba(108, 99, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Hourly chart
+            const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+            window.hourlyChart = new Chart(hourlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Coupons by Hour',
+                        data: [],
+                        backgroundColor: '#6c63ff',
+                        borderColor: '#6c63ff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Data loading functions
+        function loadDashboardData() {
+            showLoading();
+            
+            fetch(scriptURL + '?action=getDashboardData')
+                .then(response => response.json())
+                .then(data => {
+                    // Update stats
+                    document.getElementById('totalCoupons').textContent = data.totalCoupons;
+                    document.getElementById('successEmails').textContent = data.successEmails;
+                    document.getElementById('couponsChange').textContent = data.couponsChange + '%';
+                    document.getElementById('emailsChange').textContent = data.emailsChange + '%';
+                    
+                    if (data.topCourse) {
+                        document.getElementById('topCourse').textContent = data.topCourse.name;
+                        document.getElementById('topCourseCount').textContent = data.topCourse.count + ' enrollments';
+                    }
+                    
+                    document.getElementById('recentActivity').textContent = data.recentActivity;
+                    
+                    // Update charts
+                    updateCouponsChart(data.trends);
+                    updateRecentCouponsTable(data.recentCoupons);
+                    
+                    hideLoading();
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('Error', 'Failed to load dashboard data');
+                    console.error('Error:', error);
+                });
+        }
+        
+        function loadCouponsData(page = 1, filters = {}) {
+            showLoading();
+            currentPage = page;
+            
+            const params = new URLSearchParams();
+            params.append('action', 'getCoupons');
+            params.append('page', page);
+            params.append('perPage', itemsPerPage);
+            
+            if (filters.status && filters.status !== 'all') {
+                params.append('status', filters.status);
+            }
+            
+            if (filters.course && filters.course !== 'all') {
+                params.append('course', filters.course);
+            }
+            
+            if (filters.startDate) {
+                params.append('startDate', filters.startDate);
+            }
+            
+            if (filters.endDate) {
+                params.append('endDate', filters.endDate);
+            }
+            
+            fetch(scriptURL + '?' + params.toString())
+                .then(response => response.json())
+                .then(data => {
+                    allCoupons = data.coupons;
+                    updateCouponsTable(data.coupons);
+                    updatePagination(data.total, page);
+                    
+                    // Update course filter options
+                    const courseFilter = document.getElementById('filterCourse');
+                    courseFilter.innerHTML = '<option value="all">All Courses</option>';
+                    
+                    data.courses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course;
+                        option.textContent = course;
+                        courseFilter.appendChild(option);
+                    });
+                    
+                    hideLoading();
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('Error', 'Failed to load coupons data');
+                    console.error('Error:', error);
+                });
+        }
+        
+        function loadCoursesData() {
+            fetch(scriptURL + '?action=getCoursesData')
+                .then(response => response.json())
+                .then(data => {
+                    allCourses = data.courses;
+                    updateCoursesChart(data.courses);
+                    updateConversionChart(data.conversion);
+                    
+                    // Update course dropdowns
+                    const courseDropdowns = [
+                        document.getElementById('couponCategory'),
+                        document.getElementById('filterCourse')
+                    ];
+                    
+                    courseDropdowns.forEach(dropdown => {
+                        if (dropdown) {
+                            dropdown.innerHTML = '';
+                            data.courses.forEach(course => {
+                                const option = document.createElement('option');
+                                option.value = course.name;
+                                option.textContent = course.name;
+                                dropdown.appendChild(option);
+                            });
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        
+        function loadUsersData() {
+            fetch(scriptURL + '?action=getUsers')
+                .then(response => response.json())
+                .then(data => {
+                    allUsers = data.users;
+                    updateUsersTable(data.users);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        
+        function loadSettings() {
+            fetch(scriptURL + '?action=getSettings')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.settings) {
+                        document.getElementById('emailSubject').value = data.settings.emailSubject || '';
+                        document.getElementById('emailBody').value = data.settings.emailBody || '';
+                        document.getElementById('defaultCouponCode').value = data.settings.defaultCouponCode || '';
+                        document.getElementById('driveFolderUrl').value = data.settings.driveFolderUrl || '';
+                        document.getElementById('dataRetention').value = data.settings.dataRetention || '365';
+                        document.getElementById('enableNotifications').checked = data.settings.enableNotifications || false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        
+        // Table update functions
+        function updateRecentCouponsTable(coupons) {
+            const tableBody = document.getElementById('recentCouponsTable');
+            tableBody.innerHTML = '';
+            
+            coupons.forEach(coupon => {
+                const row = document.createElement('tr');
                 
-                if (data.error) {
-                    studentDetails.innerHTML = `
-                        <div style="text-align: center; padding: 2rem; color: var(--danger);">
-                            ${data.error}
-                        </div>
+                // Format date
+                const date = new Date(coupon.timestamp);
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                
+                // Status badge
+                let statusBadge = '';
+                if (coupon.emailSent === 'Sent') {
+                    statusBadge = '<span class="status-badge success">Sent</span>';
+                } else if (coupon.emailSent === 'Failed') {
+                    statusBadge = '<span class="status-badge danger">Failed</span>';
+                } else {
+                    statusBadge = '<span class="status-badge warning">Pending</span>';
+                }
+                
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${coupon.fullName}</td>
+                    <td>${coupon.email}</td>
+                    <td>${coupon.courseCategory}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" data-id="${coupon.id}" onclick="viewCouponDetails('${coupon.id}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function updateCouponsTable(coupons) {
+            const tableBody = document.getElementById('couponsTable');
+            tableBody.innerHTML = '';
+            
+            coupons.forEach(coupon => {
+                const row = document.createElement('tr');
+                
+                // Format date
+                const date = new Date(coupon.timestamp);
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                
+                // Status badge
+                let statusBadge = '';
+                if (coupon.emailSent === 'Sent') {
+                    statusBadge = '<span class="status-badge success">Sent</span>';
+                } else if (coupon.emailSent === 'Failed') {
+                    statusBadge = '<span class="status-badge danger">Failed</span>';
+                } else {
+                    statusBadge = '<span class="status-badge warning">Pending</span>';
+                }
+                
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${coupon.fullName}</td>
+                    <td>${coupon.email}</td>
+                    <td>${coupon.mobile}</td>
+                    <td>${coupon.courseCategory}</td>
+                    <td>${coupon.couponCode}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" data-id="${coupon.id}" onclick="viewCouponDetails('${coupon.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" data-id="${coupon.id}" onclick="resendCouponEmail('${coupon.id}')">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-id="${coupon.id}" onclick="deleteCoupon('${coupon.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function updateUsersTable(users) {
+            const tableBody = document.getElementById('usersTable');
+            tableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                // Format last login
+                const lastLogin = user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never';
+                
+                // Status badge
+                const statusBadge = user.active ? 
+                    '<span class="status-badge success">Active</span>' : 
+                    '<span class="status-badge danger">Inactive</span>';
+                
+                // Actions based on role
+                let actions = '';
+                if (currentUser.role === 'admin') {
+                    actions = `
+                        <button class="btn btn-secondary btn-sm" data-id="${user.id}" onclick="editUser('${user.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-id="${user.id}" onclick="deleteUser('${user.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     `;
+                } else {
+                    actions = '<span class="text-muted">No actions</span>';
+                }
+                
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>${lastLogin}</td>
+                    <td>${statusBadge}</td>
+                    <td>${actions}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Chart update functions
+        function updateCouponsChart(data) {
+            const labels = data.map(item => item.date);
+            const values = data.map(item => item.count);
+            
+            window.couponsChart.data.labels = labels;
+            window.couponsChart.data.datasets[0].data = values;
+            window.couponsChart.update();
+        }
+        
+        function updateCoursesChart(data) {
+            const labels = data.map(item => item.name);
+            const values = data.map(item => item.count);
+            
+            window.coursesChart.data.labels = labels;
+            window.coursesChart.data.datasets[0].data = values;
+            window.coursesChart.update();
+        }
+        
+        function updateConversionChart(data) {
+            window.conversionChart.data.datasets[0].data = [
+                data.successful || 0,
+                data.failed || 0,
+                data.pending || 0
+            ];
+            window.conversionChart.update();
+        }
+        
+        function updateDailyChart(data) {
+            const labels = data.map(item => item.date);
+            const values = data.map(item => item.count);
+            
+            window.dailyChart.data.labels = labels;
+            window.dailyChart.data.datasets[0].data = values;
+            window.dailyChart.update();
+        }
+        
+        function updateHourlyChart(data) {
+            const labels = data.map(item => item.hour + ':00');
+            const values = data.map(item => item.count);
+            
+            window.hourlyChart.data.labels = labels;
+            window.hourlyChart.data.datasets[0].data = values;
+            window.hourlyChart.update();
+        }
+        
+        // Pagination
+        function updatePagination(totalItems, currentPage) {
+            const pagination = document.getElementById('couponsPagination');
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            // Clear existing page numbers (keep prev/next buttons)
+            const pageItems = pagination.querySelectorAll('.page-item:not(:first-child):not(:last-child)');
+            pageItems.forEach(item => item.remove());
+            
+            // Add page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('div');
+                pageItem.className = 'page-item';
+                
+                const pageLink = document.createElement('a');
+                pageLink.className = 'page-link' + (i === currentPage ? ' active' : '');
+                pageLink.href = '#';
+                pageLink.textContent = i;
+                pageLink.setAttribute('data-page', i);
+                
+                pageLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loadCouponsData(i, getCurrentFilters());
+                });
+                
+                pageItem.appendChild(pageLink);
+                pagination.insertBefore(pageItem, pagination.lastElementChild);
+            }
+            
+            // Update prev/next buttons
+            const prevBtn = pagination.querySelector('[data-page="prev"]');
+            const nextBtn = pagination.querySelector('[data-page="next"]');
+            
+            prevBtn.classList.toggle('disabled', currentPage === 1);
+            nextBtn.classList.toggle('disabled', currentPage === totalPages);
+            
+            prevBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    loadCouponsData(currentPage - 1, getCurrentFilters());
+                }
+            });
+            
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    loadCouponsData(currentPage + 1, getCurrentFilters());
+                }
+            });
+        }
+        
+        // Filter functions
+        function getCurrentFilters() {
+            return {
+                status: document.getElementById('filterStatus').value,
+                course: document.getElementById('filterCourse').value,
+                startDate: document.getElementById('filterStartDate').value,
+                endDate: document.getElementById('filterEndDate').value
+            };
+        }
+        
+        // Event listeners setup
+        function setupEventListeners() {
+            // Close buttons
+            document.querySelectorAll('.close-btn, .btn-secondary[id$="Btn"]').forEach(btn => {
+                btn.addEventListener('click', closeAllModals);
+            });
+            
+            // OK buttons for success/error modals
+            document.getElementById('successOkBtn').addEventListener('click', closeAllModals);
+            document.getElementById('errorOkBtn').addEventListener('click', closeAllModals);
+            
+            // Refresh dashboard
+            document.getElementById('refreshDashboard').addEventListener('click', loadDashboardData);
+            
+            // View all coupons
+            document.getElementById('viewAllCoupons').addEventListener('click', function() {
+                document.querySelector('.sidebar-menu li a[data-tab="coupons"]').click();
+            });
+            
+            // Add coupon button
+            document.getElementById('addCouponBtn').addEventListener('click', function() {
+                document.getElementById('addCouponModal').classList.add('active');
+            });
+            
+            // Save coupon button
+            document.getElementById('saveCouponBtn').addEventListener('click', function() {
+                const couponData = {
+                    fullName: document.getElementById('couponName').value,
+                    email: document.getElementById('couponEmail').value,
+                    mobile: document.getElementById('couponMobile').value,
+                    courseName: document.getElementById('couponCourseName').value,
+                    courseCategory: document.getElementById('couponCategory').value,
+                    couponCode: document.getElementById('couponCode').value,
+                    sendEmail: document.getElementById('couponSendEmail').value
+                };
+                
+                if (!couponData.fullName || !couponData.email || !couponData.mobile || 
+                    !couponData.courseName || !couponData.courseCategory || !couponData.couponCode) {
+                    showError('Error', 'Please fill all required fields');
                     return;
                 }
                 
-                // Format date
-                const date = new Date(data.timestamp);
-                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                showLoading();
                 
-                // Format email sent date if available
-                let emailSentDate = 'Not sent';
-                if (data.emailSentDate) {
-                    const sentDate = new Date(data.emailSentDate);
-                    emailSentDate = sentDate.toLocaleDateString() + ' ' + sentDate.toLocaleTimeString();
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'addCoupon',
+                        data: couponData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccess('Success', 'Coupon added successfully');
+                        loadCouponsData();
+                        closeAllModals();
+                    } else {
+                        showError('Error', data.message || 'Failed to add coupon');
+                    }
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to add coupon');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+            });
+            
+            // Apply filters
+            document.getElementById('applyFiltersBtn').addEventListener('click', function() {
+                loadCouponsData(1, getCurrentFilters());
+            });
+            
+            // Reset filters
+            document.getElementById('resetFiltersBtn').addEventListener('click', function() {
+                document.getElementById('filterStatus').value = 'all';
+                document.getElementById('filterCourse').value = 'all';
+                document.getElementById('filterStartDate').value = '';
+                document.getElementById('filterEndDate').value = '';
+                loadCouponsData(1, getCurrentFilters());
+            });
+            
+            // Export coupons
+            document.getElementById('exportCouponsBtn').addEventListener('click', function() {
+                showLoading();
+                
+                const filters = getCurrentFilters();
+                const params = new URLSearchParams();
+                
+                if (filters.status && filters.status !== 'all') {
+                    params.append('status', filters.status);
                 }
                 
-                // Determine status badge
-                let statusBadge = '';
-                if (data.emailSent === 'Sent') {
-                    statusBadge = '<span class="badge badge-success">Sent</span>';
-                } else if (data.emailSent === 'Pending') {
-                    statusBadge = '<span class="badge badge-warning">Pending</span>';
+                if (filters.course && filters.course !== 'all') {
+                    params.append('course', filters.course);
+                }
+                
+                if (filters.startDate) {
+                    params.append('startDate', filters.startDate);
+                }
+                
+                if (filters.endDate) {
+                    params.append('endDate', filters.endDate);
+                }
+                
+                params.append('action', 'exportCoupons');
+                
+                fetch(scriptURL + '?' + params.toString())
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'coupons_export.csv';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(error => {
+                        showError('Error', 'Failed to export coupons');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        hideLoading();
+                    });
+            });
+            
+            // Time range selector
+            document.getElementById('timeRange').addEventListener('change', function() {
+                const value = this.value;
+                const startDate = document.getElementById('startDate');
+                const endDate = document.getElementById('endDate');
+                
+                if (value === 'custom') {
+                    startDate.style.display = 'block';
+                    endDate.style.display = 'block';
                 } else {
-                    statusBadge = '<span class="badge badge-danger">Failed</span>';
-                }
-                
-                // Create student details HTML
-                studentDetails.innerHTML = `
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary);">Student Information</h3>
-                            <div style="display: grid; grid-template-columns: max-content 1fr; gap: 0.75rem;">
-                                <div style="font-weight: 500;">Full Name:</div>
-                                <div>${data.fullName}</div>
-                                <div style="font-weight: 500;">Email:</div>
-                                <div>${data.email}</div>
-                                <div style="font-weight: 500;">Mobile:</div>
-                                <div>${data.mobile}</div>
-                                <div style="font-weight: 500;">Request Date:</div>
-                                <div>${formattedDate}</div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary);">Course Information</h3>
-                            <div style="display: grid; grid-template-columns: max-content 1fr; gap: 0.75rem;">
-                                <div style="font-weight: 500;">Course Name:</div>
-                                <div>${data.courseName}</div>
-                                <div style="font-weight: 500;">Category:</div>
-                                <div>${data.courseCategory}</div>
-                                <div style="font-weight: 500;">Coupon Code:</div>
-                                <div>${data.couponCode}</div>
-                                <div style="font-weight: 500;">Status:</div>
-                                <div>${statusBadge}</div>
-                                <div style="font-weight: 500;">Email Sent:</div>
-                                <div>${emailSentDate}</div>
-                            </div>
-                        </div>
-                    </div>
+                    startDate.style.display = 'none';
+                    endDate.style.display = 'none';
                     
-                    <div style="background-color: var(--light); padding: 1rem; border-radius: var(--radius);">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--primary);">Email History</h3>
-                        <div style="font-size: 0.9rem;">
-                            ${data.emailHistory || 'No email history available.'}
-                        </div>
-                    </div>
-                `;
+                    // Load data for selected range
+                    fetch(scriptURL + '?action=getTrends&range=' + value)
+                        .then(response => response.json())
+                        .then(data => {
+                            updateCouponsChart(data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
+            });
+            
+            // Add user button
+            document.getElementById('addUserBtn').addEventListener('click', function() {
+                document.getElementById('addUserModal').classList.add('active');
+            });
+            
+            // Save user button
+            document.getElementById('saveUserBtn').addEventListener('click', function() {
+                const userData = {
+                    name: document.getElementById('userName').value,
+                    email: document.getElementById('userEmail').value,
+                    password: document.getElementById('userPassword').value,
+                    confirmPassword: document.getElementById('userConfirmPassword').value,
+                    role: document.getElementById('userRole').value
+                };
                 
-                // Set email for resend button
-                document.getElementById('resendCouponBtn').setAttribute('data-email', data.email);
-            })
-            .catch(error => {
-                console.error('Error loading student details:', error);
-                studentLoading.style.display = 'none';
-                studentDetails.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; color: var(--danger);">
-                        Error loading student details. Please try again.
-                    </div>
-                `;
+                if (!userData.name || !userData.email || !userData.password || !userData.confirmPassword) {
+                    showError('Error', 'Please fill all required fields');
+                    return;
+                }
+                
+                if (userData.password !== userData.confirmPassword) {
+                    showError('Error', 'Passwords do not match');
+                    return;
+                }
+                
+                showLoading();
+                
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'addUser',
+                        data: userData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccess('Success', 'User added successfully');
+                        loadUsersData();
+                        closeAllModals();
+                    } else {
+                        showError('Error', data.message || 'Failed to add user');
+                    }
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to add user');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+            });
+            
+            // Save settings
+            document.getElementById('saveSettingsBtn').addEventListener('click', function() {
+                const settings = {
+                    emailSubject: document.getElementById('emailSubject').value,
+                    emailBody: document.getElementById('emailBody').value,
+                    defaultCouponCode: document.getElementById('defaultCouponCode').value
+                };
+                
+                showLoading();
+                
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'saveSettings',
+                        data: settings
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccess('Success', 'Settings saved successfully');
+                    } else {
+                        showError('Error', data.message || 'Failed to save settings');
+                    }
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to save settings');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+            });
+            
+            // Save config
+            document.getElementById('saveConfigBtn').addEventListener('click', function() {
+                const config = {
+                    driveFolderUrl: document.getElementById('driveFolderUrl').value,
+                    dataRetention: document.getElementById('dataRetention').value,
+                    enableNotifications: document.getElementById('enableNotifications').checked
+                };
+                
+                showLoading();
+                
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'saveConfig',
+                        data: config
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccess('Success', 'Configuration saved successfully');
+                    } else {
+                        showError('Error', data.message || 'Failed to save configuration');
+                    }
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to save configuration');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+            });
+            
+            // Generate report
+            document.getElementById('generateReportBtn').addEventListener('click', function() {
+                showLoading();
+                
+                fetch(scriptURL + '?action=generateReport')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'coupons_report.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(error => {
+                        showError('Error', 'Failed to generate report');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        hideLoading();
+                    });
+            });
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                // In a real app, this would clear session and redirect to login
+                alert('Logout functionality would be implemented here');
             });
         }
         
-        // Function to export data
-        function exportData() {
-            // Get export options
-            const format = document.getElementById('exportFormat').value;
-            const startDate = document.getElementById('exportStartDate').value;
-            const endDate = document.getElementById('exportEndDate').value;
+        // Action functions
+        function viewCouponDetails(id) {
+            const coupon = allCoupons.find(c => c.id === id);
+            if (coupon) {
+                const details = `
+                    <h3>Coupon Details</h3>
+                    <p><strong>Name:</strong> ${coupon.fullName}</p>
+                    <p><strong>Email:</strong> ${coupon.email}</p>
+                    <p><strong>Mobile:</strong> ${coupon.mobile}</p>
+                    <p><strong>Course:</strong> ${coupon.courseCategory} - ${coupon.courseName}</p>
+                    <p><strong>Coupon Code:</strong> ${coupon.couponCode}</p>
+                    <p><strong>Status:</strong> ${coupon.emailSent}</p>
+                    <p><strong>Date:</strong> ${new Date(coupon.timestamp).toLocaleString()}</p>
+                `;
+                
+                document.getElementById('successTitle').textContent = 'Coupon Details';
+                document.getElementById('successMessage').innerHTML = details;
+                document.getElementById('successOkBtn').style.display = 'block';
+                document.getElementById('successModal').classList.add('active');
+            }
+        }
+        
+        function resendCouponEmail(id) {
+            if (!confirm('Are you sure you want to resend this coupon email?')) {
+                return;
+            }
             
-            // Prepare request data
-            const requestData = {
-                action: 'exportData',
-                format: format,
-                startDate: startDate,
-                endDate: endDate
-            };
+            showLoading();
             
-            // Your Google Apps Script deployment URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwl7x5LAg4qTyvwHrPdKgnwTbY7RkTeAQJmaRa1ngxqt_LH2RI3r1HEU4XiPJm90KIr/exec';
-            
-            // Show loading state
-            const exportBtn = document.getElementById('confirmExportBtn');
-            const originalText = exportBtn.innerHTML;
-            exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
-            exportBtn.disabled = true;
-            
-            // Send request to Google Apps Script
             fetch(scriptURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Export failed');
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                // Create download link
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                
-                // Set filename based on format and date range
-                let filename = 'PW_Coupon_Data_';
-                filename += startDate + '_to_' + endDate;
-                
-                if (format === 'csv') {
-                    filename += '.csv';
-                } else if (format === 'excel') {
-                    filename += '.xlsx';
-                } else {
-                    filename += '.pdf';
-                }
-                
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-                
-                // Close modal
-                document.getElementById('exportModal').classList.remove('active');
-            })
-            .catch(error => {
-                console.error('Error exporting data:', error);
-                alert('Export failed. Please try again.');
-            })
-            .finally(() => {
-                // Restore button state
-                exportBtn.innerHTML = originalText;
-                exportBtn.disabled = false;
-            });
-        }
-        
-        // Event listener for resend coupon button
-        document.getElementById('resendCouponBtn').addEventListener('click', function() {
-            const email = this.getAttribute('data-email');
-            if (!email) return;
-            
-            // Show loading state
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            this.disabled = true;
-            
-            // Prepare request data
-            const requestData = {
-                action: 'resendCoupon',
-                email: email
-            };
-            
-            // Your Google Apps Script deployment URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwl7x5LAg4qTyvwHrPdKgnwTbY7RkTeAQJmaRa1ngxqt_LH2RI3r1HEU4XiPJm90KIr/exec';
-            
-            // Send request to Google Apps Script
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData)
+                body: JSON.stringify({
+                    action: 'resendCouponEmail',
+                    id: id
+                })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Coupon resent successfully!');
-                    // Refresh student details
-                    viewStudentDetails(email);
+                    showSuccess('Success', 'Coupon email resent successfully');
+                    loadCouponsData(currentPage, getCurrentFilters());
                 } else {
-                    alert('Failed to resend coupon: ' + (data.error || 'Unknown error'));
+                    showError('Error', data.message || 'Failed to resend coupon email');
                 }
             })
             .catch(error => {
-                console.error('Error resending coupon:', error);
-                alert('Failed to resend coupon. Please try again.');
+                showError('Error', 'Failed to resend coupon email');
+                console.error('Error:', error);
             })
             .finally(() => {
-                // Restore button state
-                this.innerHTML = originalText;
-                this.disabled = false;
+                hideLoading();
             });
-        });
+        }
+        
+        function deleteCoupon(id) {
+            if (!confirm('Are you sure you want to delete this coupon? This action cannot be undone.')) {
+                return;
+            }
+            
+            showLoading();
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'deleteCoupon',
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Success', 'Coupon deleted successfully');
+                    loadCouponsData(currentPage, getCurrentFilters());
+                } else {
+                    showError('Error', data.message || 'Failed to delete coupon');
+                }
+            })
+            .catch(error => {
+                showError('Error', 'Failed to delete coupon');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                hideLoading();
+            });
+        }
+        
+        function editUser(id) {
+            const user = allUsers.find(u => u.id === id);
+            if (user) {
+                document.getElementById('userName').value = user.name;
+                document.getElementById('userEmail').value = user.email;
+                document.getElementById('userRole').value = user.role;
+                
+                // Clear password fields
+                document.getElementById('userPassword').value = '';
+                document.getElementById('userConfirmPassword').value = '';
+                
+                // Change modal title and save button
+                document.querySelector('#addUserModal .modal-header h3').textContent = 'Edit User';
+                document.getElementById('saveUserBtn').textContent = 'Update User';
+                document.getElementById('saveUserBtn').setAttribute('data-id', id);
+                
+                document.getElementById('addUserModal').classList.add('active');
+            }
+        }
+        
+        function deleteUser(id) {
+            if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                return;
+            }
+            
+            showLoading();
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'deleteUser',
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Success', 'User deleted successfully');
+                    loadUsersData();
+                } else {
+                    showError('Error', data.message || 'Failed to delete user');
+                }
+            })
+            .catch(error => {
+                showError('Error', 'Failed to delete user');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                hideLoading();
+            });
+        }
     </script>
 </body>
 </html>
