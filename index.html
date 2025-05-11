@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PW Coupon System - Admin Dashboard</title>
+    <title>PW Coupon System - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +43,132 @@
             background-color: var(--bg);
             -webkit-font-smoothing: antialiased;
         }
-        
+
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--cream);
+        }
+
+        .login-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-logo .logo-icon {
+            color: var(--accent);
+            font-size: 2rem;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .login-form .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .login-form .form-control {
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: var(--white);
+            color: var(--text);
+        }
+
+        .login-form .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+            outline: none;
+        }
+
+        .login-form .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+            width: 100%;
+        }
+
+        .login-form .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Dashboard Styles (same as before, but initially hidden) */
+        .dashboard-wrapper {
+            display: none;
+        }
+
         /* Header Styles */
         header {
             background-color: var(--white);
@@ -755,564 +880,753 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <a href="#" class="logo">
-                <i class="fas fa-tag logo-icon"></i>
-                <span>PW Coupon Admin</span>
-            </a>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <div class="login-logo">
+                <a href="#" class="logo">
+                    <i class="fas fa-tag logo-icon"></i>
+                    <span>PW Coupon Admin</span>
+                </a>
+            </div>
             
-            <div class="header-right">
-                <div class="user-info">
-                    <div class="user-avatar" id="userInitials">AD</div>
-                    <span id="userEmail">admin@example.com</span>
+            <h2 class="login-title">Admin Login</h2>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="loginUsername">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" placeholder="Enter your username" required>
+                    <div class="error-message" id="usernameError"></div>
                 </div>
-                <button class="logout-btn" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i>
+                
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
-            </div>
+                
+                <div class="login-footer">
+                    <p>PW Coupon Admin System</p>
+                </div>
+            </form>
         </div>
-    </header>
+    </div>
 
-    <!-- Dashboard Layout -->
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <ul class="sidebar-menu">
-                <li>
-                    <a href="#" class="active" data-tab="dashboard">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-tab="coupons">
-                        <i class="fas fa-tags"></i>
-                        <span>Coupons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-tab="analytics">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Analytics</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-tab="settings">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-tab="users">
-                        <i class="fas fa-users"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Dashboard Tab -->
-            <div class="tab-content active" id="dashboard-tab">
-                <div class="page-header">
-                    <h1 class="page-title">Dashboard Overview</h1>
-                    <div class="page-actions">
-                        <button class="btn btn-primary" id="refreshDashboard">
-                            <i class="fas fa-sync-alt"></i> Refresh
-                        </button>
-                    </div>
-                </div>
+    <!-- Dashboard (initially hidden) -->
+    <div class="dashboard-wrapper" id="dashboardWrapper">
+        <!-- Header -->
+        <header>
+            <div class="container header-container">
+                <a href="#" class="logo">
+                    <i class="fas fa-tag logo-icon"></i>
+                    <span>PW Coupon Admin</span>
+                </a>
                 
-                <!-- Stats Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-title">Total Coupons Sent</div>
-                        <div class="stat-value" id="totalCoupons">0</div>
-                        <div class="stat-change up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="couponsChange">0%</span> from last week
-                        </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userInitials">AD</div>
+                        <span id="userEmail">admin@example.com</span>
                     </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-title">Successful Emails</div>
-                        <div class="stat-value" id="successEmails">0</div>
-                        <div class="stat-change up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="emailsChange">0%</span> from last week
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-title">Top Course</div>
-                        <div class="stat-value" id="topCourse">-</div>
-                        <div class="stat-title" id="topCourseCount">0 enrollments</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-title">Recent Activity</div>
-                        <div class="stat-value" id="recentActivity">0</div>
-                        <div class="stat-title">coupons today</div>
-                    </div>
-                </div>
-                
-                <!-- Charts -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Coupon Usage Trends</h2>
-                        <div class="date-range-picker">
-                            <select class="form-control" id="timeRange">
-                                <option value="7">Last 7 Days</option>
-                                <option value="30">Last 30 Days</option>
-                                <option value="90">Last 90 Days</option>
-                                <option value="custom">Custom Range</option>
-                            </select>
-                            <input type="date" class="form-control" id="startDate" style="display: none;">
-                            <input type="date" class="form-control" id="endDate" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="couponsChart"></canvas>
-                    </div>
-                </div>
-                
-                <!-- Recent Coupons -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Recent Coupon Requests</h2>
-                        <button class="btn btn-secondary btn-sm" id="viewAllCoupons">
-                            <i class="fas fa-list"></i> View All
-                        </button>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Course</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentCouponsTable">
-                                <!-- Data will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Coupons Tab -->
-            <div class="tab-content" id="coupons-tab">
-                <div class="page-header">
-                    <h1 class="page-title">Coupon Management</h1>
-                    <div class="page-actions">
-                        <button class="btn btn-primary" id="addCouponBtn">
-                            <i class="fas fa-plus"></i> Add Coupon
-                        </button>
-                        <button class="btn btn-secondary" id="exportCouponsBtn">
-                            <i class="fas fa-file-export"></i> Export
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Filters -->
-                <div class="filters">
-                    <div class="filter-group">
-                        <label class="form-label">Status:</label>
-                        <select class="form-control" id="filterStatus">
-                            <option value="all">All</option>
-                            <option value="sent">Sent</option>
-                            <option value="pending">Pending</option>
-                            <option value="failed">Failed</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="form-label">Course:</label>
-                        <select class="form-control" id="filterCourse">
-                            <option value="all">All Courses</option>
-                            <!-- Course options will be loaded here -->
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="form-label">Date Range:</label>
-                        <input type="date" class="form-control" id="filterStartDate">
-                        <span>to</span>
-                        <input type="date" class="form-control" id="filterEndDate">
-                    </div>
-                    
-                    <button class="btn btn-secondary btn-sm" id="applyFiltersBtn">
-                        <i class="fas fa-filter"></i> Apply
-                    </button>
-                    
-                    <button class="btn btn-secondary btn-sm" id="resetFiltersBtn">
-                        <i class="fas fa-redo"></i> Reset
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
                     </button>
                 </div>
-                
-                <!-- Coupons Table -->
-                <div class="card">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Timestamp</th>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Mobile</th>
-                                    <th>Course</th>
-                                    <th>Coupon Code</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="couponsTable">
-                                <!-- Data will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <div class="pagination" id="couponsPagination">
-                        <div class="page-item">
-                            <a href="#" class="page-link" data-page="prev">&laquo;</a>
-                        </div>
-                        <!-- Page numbers will be added here -->
-                        <div class="page-item">
-                            <a href="#" class="page-link" data-page="next">&raquo;</a>
-                        </div>
-                    </div>
-                </div>
             </div>
-            
-            <!-- Analytics Tab -->
-            <div class="tab-content" id="analytics-tab">
-                <div class="page-header">
-                    <h1 class="page-title">Analytics & Reports</h1>
-                    <div class="page-actions">
-                        <button class="btn btn-primary" id="generateReportBtn">
-                            <i class="fas fa-file-pdf"></i> Generate Report
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="tabs">
-                    <div class="tab active" data-analytics-tab="courses">Courses</div>
-                    <div class="tab" data-analytics-tab="time">Time Analysis</div>
-                    <div class="tab" data-analytics-tab="geo">Geographic</div>
-                </div>
-                
-                <div class="tab-content active" id="courses-analytics">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Course Popularity</h2>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="coursesChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Course Conversion Rates</h2>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="conversionChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="time-analytics">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Daily Activity</h2>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="dailyChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Hourly Activity</h2>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="hourlyChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="geo-analytics">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Geographic Distribution</h2>
-                        </div>
-                        <div class="chart-container">
-                            <div id="map" style="height: 100%; width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
+        </header>
+
+        <!-- Dashboard Layout -->
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="#" class="active" data-tab="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="coupons">
+                            <i class="fas fa-tags"></i>
+                            <span>Coupons</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="analytics">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="users">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            
-            <!-- Settings Tab -->
-            <div class="tab-content" id="settings-tab">
-                <div class="page-header">
-                    <h1 class="page-title">System Settings</h1>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Email Template</h2>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-content active" id="dashboard-tab">
+                    <div class="page-header">
+                        <h1 class="page-title">Dashboard Overview</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="refreshDashboard">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label">Email Subject</label>
-                            <input type="text" class="form-control" id="emailSubject" value="Your Exclusive Physics Wallah Discount is Ready">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Email Body (HTML)</label>
-                            <textarea class="form-control" id="emailBody" rows="12" style="font-family: monospace;">
-<!-- Email template HTML will be loaded here -->
-                            </textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Default Coupon Code</label>
-                            <input type="text" class="form-control" id="defaultCouponCode" value="YUGNA00001">
-                        </div>
-                        
-                        <button class="btn btn-primary" id="saveSettingsBtn">
-                            <i class="fas fa-save"></i> Save Settings
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">System Configuration</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label">Google Drive Folder URL</label>
-                            <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/your-folder">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Data Retention (Days)</label>
-                            <input type="number" class="form-control" id="dataRetention" value="365">
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="enableNotifications">
-                                <label class="form-check-label" for="enableNotifications">Enable Email Notifications</label>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-title">Total Coupons Sent</div>
+                            <div class="stat-value" id="totalCoupons">0</div>
+                            <div class="stat-change up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="couponsChange">0%</span> from last week
                             </div>
                         </div>
                         
-                        <button class="btn btn-primary" id="saveConfigBtn">
-                            <i class="fas fa-save"></i> Save Configuration
-                        </button>
+                        <div class="stat-card">
+                            <div class="stat-title">Successful Emails</div>
+                            <div class="stat-value" id="successEmails">0</div>
+                            <div class="stat-change up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="emailsChange">0%</span> from last week
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-title">Top Course</div>
+                            <div class="stat-value" id="topCourse">-</div>
+                            <div class="stat-title" id="topCourseCount">0 enrollments</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-title">Recent Activity</div>
+                            <div class="stat-value" id="recentActivity">0</div>
+                            <div class="stat-title">coupons today</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Users Tab -->
-            <div class="tab-content" id="users-tab">
-                <div class="page-header">
-                    <h1 class="page-title">User Management</h1>
-                    <div class="page-actions">
-                        <button class="btn btn-primary" id="addUserBtn">
-                            <i class="fas fa-user-plus"></i> Add User
-                        </button>
+                    
+                    <!-- Charts -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Coupon Usage Trends</h2>
+                            <div class="date-range-picker">
+                                <select class="form-control" id="timeRange">
+                                    <option value="7">Last 7 Days</option>
+                                    <option value="30">Last 30 Days</option>
+                                    <option value="90">Last 90 Days</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                                <input type="date" class="form-control" id="startDate" style="display: none;">
+                                <input type="date" class="form-control" id="endDate" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="couponsChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Coupons -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recent Coupon Requests</h2>
+                            <button class="btn btn-secondary btn-sm" id="viewAllCoupons">
+                                <i class="fas fa-list"></i> View All
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Course</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentCouponsTable">
+                                    <!-- Data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="card">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Last Login</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTable">
-                                <!-- Data will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Coupon Modal -->
-    <div class="modal-overlay" id="addCouponModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Add New Coupon</h3>
-                <button class="close-btn" id="closeCouponModal">&times;</button>
-            </div>
-            
-            <div class="modal-body">
-                <form id="couponForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="couponName" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="couponEmail" required>
+                <!-- Coupons Tab -->
+                <div class="tab-content" id="coupons-tab">
+                    <div class="page-header">
+                        <h1 class="page-title">Coupon Management</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="addCouponBtn">
+                                <i class="fas fa-plus"></i> Add Coupon
+                            </button>
+                            <button class="btn btn-secondary" id="exportCouponsBtn">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Mobile Number</label>
-                            <input type="tel" class="form-control" id="couponMobile" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Course Category</label>
-                            <select class="form-control" id="couponCategory" required>
-                                <!-- Options will be loaded here -->
+                    <!-- Filters -->
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label class="form-label">Status:</label>
+                            <select class="form-control" id="filterStatus">
+                                <option value="all">All</option>
+                                <option value="sent">Sent</option>
+                                <option value="pending">Pending</option>
+                                <option value="failed">Failed</option>
                             </select>
                         </div>
+                        
+                        <div class="filter-group">
+                            <label class="form-label">Course:</label>
+                            <select class="form-control" id="filterCourse">
+                                <option value="all">All Courses</option>
+                                <!-- Course options will be loaded here -->
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="form-label">Date Range:</label>
+                            <input type="date" class="form-control" id="filterStartDate">
+                            <span>to</span>
+                            <input type="date" class="form-control" id="filterEndDate">
+                        </div>
+                        
+                        <button class="btn btn-secondary btn-sm" id="applyFiltersBtn">
+                            <i class="fas fa-filter"></i> Apply
+                        </button>
+                        
+                        <button class="btn btn-secondary btn-sm" id="resetFiltersBtn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Course Name</label>
-                            <input type="text" class="form-control" id="couponCourseName" required>
+                    <!-- Coupons Table -->
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Course</th>
+                                        <th>Coupon Code</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="couponsTable">
+                                    <!-- Data will be loaded here -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Coupon Code</label>
-                            <input type="text" class="form-control" id="couponCode" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Send Email Notification</label>
-                        <select class="form-control" id="couponSendEmail">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelCouponBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveCouponBtn">Save Coupon</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add User Modal -->
-    <div class="modal-overlay" id="addUserModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Add New User</h3>
-                <button class="close-btn" id="closeUserModal">&times;</button>
-            </div>
-            
-            <div class="modal-body">
-                <form id="userForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="userName" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="userEmail" required>
+                        
+                        <!-- Pagination -->
+                        <div class="pagination" id="couponsPagination">
+                            <div class="page-item">
+                                <a href="#" class="page-link" data-page="prev">&laquo;</a>
+                            </div>
+                            <!-- Page numbers will be added here -->
+                            <div class="page-item">
+                                <a href="#" class="page-link" data-page="next">&raquo;</a>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control" id="userPassword" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="userConfirmPassword" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Role</label>
-                        <select class="form-control" id="userRole" required>
-                            <option value="admin">Admin</option>
-                            <option value="editor">Editor</option>
-                            <option value="viewer">Viewer</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelUserBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveUserBtn">Save User</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading Modal -->
-    <div class="modal-overlay" id="loadingModal">
-        <div class="modal-container" style="max-width: 400px; text-align: center;">
-            <div class="modal-body">
-                <div class="loading-spinner"></div>
-                <p class="loading-text">Processing your request...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal-container" style="max-width: 400px; text-align: center;">
-            <div class="modal-body">
-                <div class="success-icon">
-                    <i class="fas fa-check"></i>
                 </div>
-                <h4 id="successTitle">Success!</h4>
-                <p id="successMessage">Operation completed successfully.</p>
-                <button class="btn btn-primary" id="successOkBtn">OK</button>
+                
+                <!-- Analytics Tab -->
+                <div class="tab-content" id="analytics-tab">
+                    <div class="page-header">
+                        <h1 class="page-title">Analytics & Reports</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="generateReportBtn">
+                                <i class="fas fa-file-pdf"></i> Generate Report
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-analytics-tab="courses">Courses</div>
+                        <div class="tab" data-analytics-tab="time">Time Analysis</div>
+                        <div class="tab" data-analytics-tab="geo">Geographic</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="courses-analytics">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Course Popularity</h2>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="coursesChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Course Conversion Rates</h2>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="conversionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="time-analytics">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Daily Activity</h2>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="dailyChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Hourly Activity</h2>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="hourlyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="geo-analytics">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Geographic Distribution</h2>
+                            </div>
+                            <div class="chart-container">
+                                <div id="map" style="height: 100%; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div class="tab-content" id="settings-tab">
+                    <div class="page-header">
+                        <h1 class="page-title">System Settings</h1>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Email Template</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Email Subject</label>
+                                <input type="text" class="form-control" id="emailSubject" value="Your Exclusive Physics Wallah Discount is Ready">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Email Body (HTML)</label>
+                                <textarea class="form-control" id="emailBody" rows="12" style="font-family: monospace;">
+<!-- Email template HTML will be loaded here -->
+                                </textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Default Coupon Code</label>
+                                <input type="text" class="form-control" id="defaultCouponCode" value="YUGNA00001">
+                            </div>
+                            
+                            <button class="btn btn-primary" id="saveSettingsBtn">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">System Configuration</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Google Drive Folder URL</label>
+                                <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/your-folder">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Data Retention (Days)</label>
+                                <input type="number" class="form-control" id="dataRetention" value="365">
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="enableNotifications">
+                                    <label class="form-check-label" for="enableNotifications">Enable Email Notifications</label>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="saveConfigBtn">
+                                <i class="fas fa-save"></i> Save Configuration
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Users Tab -->
+                <div class="tab-content" id="users-tab">
+                    <div class="page-header">
+                        <h1 class="page-title">User Management</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="addUserBtn">
+                                <i class="fas fa-user-plus"></i> Add User
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Last Login</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <!-- Data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Error Modal -->
-    <div class="modal-overlay" id="errorModal">
-        <div class="modal-container" style="max-width: 400px; text-align: center;">
-            <div class="modal-body">
-                <div class="error-icon">
-                    <i class="fas fa-exclamation"></i>
+        <!-- Add Coupon Modal -->
+        <div class="modal-overlay" id="addCouponModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Add New Coupon</h3>
+                    <button class="close-btn" id="closeCouponModal">&times;</button>
                 </div>
-                <h4 id="errorTitle">Error!</h4>
-                <p id="errorMessage">An error occurred while processing your request.</p>
-                <button class="btn btn-primary" id="errorOkBtn">OK</button>
+                
+                <div class="modal-body">
+                    <form id="couponForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="couponName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="couponEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" id="couponMobile" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Course Category</label>
+                                <select class="form-control" id="couponCategory" required>
+                                    <!-- Options will be loaded here -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Course Name</label>
+                                <input type="text" class="form-control" id="couponCourseName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Coupon Code</label>
+                                <input type="text" class="form-control" id="couponCode" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Send Email Notification</label>
+                            <select class="form-control" id="couponSendEmail">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelCouponBtn">Cancel</button>
+                    <button class="btn btn-primary" id="saveCouponBtn">Save Coupon</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add User Modal -->
+        <div class="modal-overlay" id="addUserModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Add New User</h3>
+                    <button class="close-btn" id="closeUserModal">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="userName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="userEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" id="userPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="userConfirmPassword" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <select class="form-control" id="userRole" required>
+                                <option value="admin">Admin</option>
+                                <option value="editor">Editor</option>
+                                <option value="viewer">Viewer</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelUserBtn">Cancel</button>
+                    <button class="btn btn-primary" id="saveUserBtn">Save User</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal-overlay" id="loadingModal">
+            <div class="modal-container" style="max-width: 400px; text-align: center;">
+                <div class="modal-body">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Processing your request...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal-overlay" id="successModal">
+            <div class="modal-container" style="max-width: 400px; text-align: center;">
+                <div class="modal-body">
+                    <div class="success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h4 id="successTitle">Success!</h4>
+                    <p id="successMessage">Operation completed successfully.</p>
+                    <button class="btn btn-primary" id="successOkBtn">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div class="modal-overlay" id="errorModal">
+            <div class="modal-container" style="max-width: 400px; text-align: center;">
+                <div class="modal-body">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation"></i>
+                    </div>
+                    <h4 id="errorTitle">Error!</h4>
+                    <p id="errorMessage">An error occurred while processing your request.</p>
+                    <button class="btn btn-primary" id="errorOkBtn">OK</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <script>
+        // ==================== AUTHENTICATION SYSTEM ====================
+        
+        // Credentials (in a real app, these would be stored more securely)
+        const ADMIN_CREDENTIALS = {
+            username: "Yugal",
+            passwordHash: "8a8e3e9c5a0615903a5b9e5f5b5e5f5b5e5f5b5e5f5b5e5f5b5e5f5b5e5f5b5e" // SHA-256 hash of "Yugal11jan911@"
+        };
+        
+        // Session management
+        let currentSession = {
+            isAuthenticated: false,
+            user: null
+        };
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for existing session
+            checkSession();
+            
+            // Set up login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+            
+            // Set up logout button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                handleLogout();
+            });
+        });
+        
+        // Check for existing session
+        function checkSession() {
+            const sessionData = localStorage.getItem('pwCouponAdminSession');
+            
+            if (sessionData) {
+                try {
+                    const session = JSON.parse(sessionData);
+                    
+                    // Verify session is still valid
+                    if (session.expires > Date.now()) {
+                        currentSession = session;
+                        showDashboard();
+                        initializeDashboard();
+                    } else {
+                        localStorage.removeItem('pwCouponAdminSession');
+                        showLogin();
+                    }
+                } catch (e) {
+                    localStorage.removeItem('pwCouponAdminSession');
+                    showLogin();
+                }
+            } else {
+                showLogin();
+            }
+        }
+        
+        // Handle login
+        function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            // Clear previous errors
+            document.getElementById('usernameError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+            
+            // Validate inputs
+            if (!username) {
+                document.getElementById('usernameError').textContent = 'Username is required';
+                document.getElementById('usernameError').style.display = 'block';
+                return;
+            }
+            
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'Password is required';
+                document.getElementById('passwordError').style.display = 'block';
+                return;
+            }
+            
+            // Verify credentials
+            if (username === ADMIN_CREDENTIALS.username) {
+                // Hash the entered password for comparison
+                const enteredPasswordHash = sha256(password);
+                
+                if (enteredPasswordHash === ADMIN_CREDENTIALS.passwordHash) {
+                    // Create session
+                    currentSession = {
+                        isAuthenticated: true,
+                        user: {
+                            name: 'Admin User',
+                            email: 'admin@example.com',
+                            role: 'admin'
+                        },
+                        expires: Date.now() + (8 * 60 * 60 * 1000) // 8 hours from now
+                    };
+                    
+                    // Save session to localStorage
+                    localStorage.setItem('pwCouponAdminSession', JSON.stringify(currentSession));
+                    
+                    // Show dashboard
+                    showDashboard();
+                    initializeDashboard();
+                } else {
+                    document.getElementById('passwordError').textContent = 'Invalid password';
+                    document.getElementById('passwordError').style.display = 'block';
+                }
+            } else {
+                document.getElementById('usernameError').textContent = 'Invalid username';
+                document.getElementById('usernameError').style.display = 'block';
+            }
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            // Clear session
+            currentSession = {
+                isAuthenticated: false,
+                user: null
+            };
+            
+            // Remove from storage
+            localStorage.removeItem('pwCouponAdminSession');
+            
+            // Show login page
+            showLogin();
+        }
+        
+        // Show login page
+        function showLogin() {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboardWrapper').style.display = 'none';
+            
+            // Clear form
+            document.getElementById('loginForm').reset();
+        }
+        
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboardWrapper').style.display = 'block';
+            
+            // Update user info
+            if (currentSession.user) {
+                document.getElementById('userInitials').textContent = getInitials(currentSession.user.name);
+                document.getElementById('userEmail').textContent = currentSession.user.email;
+            }
+        }
+        
+        // ==================== DASHBOARD FUNCTIONALITY ====================
+        
         // Global variables
-        let currentUser = {};
         let allCoupons = [];
         let allCourses = [];
         let allUsers = [];
@@ -1322,17 +1636,10 @@
         // Google Apps Script deployment URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwVp8BecSX-NdPH1jbNwKtYZNJCUzhSbOTy4mVifKt0nzwABvSU_QDYP_ydBCHQz4P4/exec';
         
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set current user (in a real app, this would come from authentication)
-            currentUser = {
-                name: 'Admin User',
-                email: 'admin@example.com',
-                role: 'admin'
-            };
-            
-            document.getElementById('userInitials').textContent = getInitials(currentUser.name);
-            document.getElementById('userEmail').textContent = currentUser.email;
+        // Initialize dashboard
+        function initializeDashboard() {
+            // Set current user from session
+            const currentUser = currentSession.user;
             
             // Tab navigation
             setupTabNavigation();
@@ -1349,7 +1656,7 @@
             
             // Event listeners
             setupEventListeners();
-        });
+        }
         
         // Helper functions
         function getInitials(name) {
@@ -1833,7 +2140,7 @@
                 
                 // Actions based on role
                 let actions = '';
-                if (currentUser.role === 'admin') {
+                if (currentSession.user.role === 'admin') {
                     actions = `
                         <button class="btn btn-secondary btn-sm" data-id="${user.id}" onclick="editUser('${user.id}')">
                             <i class="fas fa-edit"></i>
@@ -2277,12 +2584,6 @@
                     .finally(() => {
                         hideLoading();
                     });
-            });
-            
-            // Logout
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                // In a real app, this would clear session and redirect to login
-                alert('Logout functionality would be implemented here');
             });
         }
         
