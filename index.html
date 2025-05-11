@@ -44,6 +44,7 @@
             color: var(--text);
             background-color: var(--bg);
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         /* Login Page Styles */
@@ -147,7 +148,7 @@
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
         
@@ -215,10 +216,22 @@
             color: var(--primary);
         }
         
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
         /* Sidebar */
         .dashboard-container {
             display: flex;
             min-height: calc(100vh - 70px);
+            position: relative;
         }
         
         .sidebar {
@@ -230,6 +243,8 @@
             position: sticky;
             top: 70px;
             height: calc(100vh - 70px);
+            overflow-y: auto;
+            z-index: 999;
         }
         
         .sidebar-menu {
@@ -273,6 +288,7 @@
             flex: 1;
             padding: 2rem;
             background-color: var(--bg);
+            transition: var(--transition);
         }
         
         .page-header {
@@ -426,6 +442,7 @@
         /* Tables */
         .table-responsive {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .table {
@@ -768,36 +785,25 @@
         }
         
         @media (max-width: 768px) {
-            .dashboard-container {
-                flex-direction: column;
+            .hamburger {
+                display: block;
             }
             
             .sidebar {
-                width: 100%;
-                position: static;
-                height: auto;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 1rem 0;
+                position: fixed;
+                top: 70px;
+                left: -250px;
+                height: calc(100vh - 70px);
+                z-index: 999;
+                transition: var(--transition);
             }
             
-            .sidebar-menu {
-                display: flex;
-                overflow-x: auto;
-                padding: 0 1rem;
-            }
-            
-            .sidebar-menu li {
-                margin-bottom: 0;
-                white-space: nowrap;
-            }
-            
-            .sidebar-menu li a {
-                padding: 0.75rem 1rem;
+            .sidebar.active {
+                left: 0;
             }
             
             .main-content {
-                padding: 1.5rem;
+                margin-left: 0;
             }
             
             .stats-grid {
@@ -808,6 +814,15 @@
             .form-row {
                 flex-direction: column;
                 gap: 1rem;
+            }
+            
+            .date-range-picker {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .date-range-picker .form-control {
+                max-width: 100%;
             }
         }
         
@@ -836,15 +851,6 @@
             
             .btn {
                 width: 100%;
-            }
-            
-            .date-range-picker {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .date-range-picker .form-control {
-                max-width: 100%;
             }
         }
     </style>
@@ -885,6 +891,9 @@
         <!-- Header -->
         <header>
             <div class="container header-container">
+                <button class="hamburger" id="hamburgerMenu">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <a href="#" class="logo">
                     <i class="fas fa-tag logo-icon"></i>
                     <span>PW Coupon Admin</span>
@@ -905,7 +914,7 @@
         <!-- Dashboard Layout -->
         <div class="dashboard-container">
             <!-- Sidebar -->
-            <div class="sidebar">
+            <div class="sidebar" id="sidebar">
                 <ul class="sidebar-menu">
                     <li>
                         <a href="#" class="active" data-tab="dashboard">
@@ -935,7 +944,7 @@
             </div>
 
             <!-- Main Content -->
-            <div class="main-content">
+            <div class="main-content" id="mainContent">
                 <!-- Dashboard Tab -->
                 <div class="tab-content active" id="dashboard-tab">
                     <div class="page-header">
@@ -943,6 +952,9 @@
                         <div class="page-actions">
                             <button class="btn btn-primary" id="refreshDashboard">
                                 <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <button class="btn btn-secondary" id="generateDashboardReport">
+                                <i class="fas fa-file-pdf"></i> Report
                             </button>
                         </div>
                     </div>
@@ -989,7 +1001,10 @@
                                     <option value="7">Last 7 Days</option>
                                     <option value="30">Last 30 Days</option>
                                     <option value="90">Last 90 Days</option>
+                                    <option value="custom">Custom Range</option>
                                 </select>
+                                <input type="date" class="form-control" id="startDate" style="display: none;">
+                                <input type="date" class="form-control" id="endDate" style="display: none;">
                             </div>
                         </div>
                         <div class="chart-container">
@@ -1035,6 +1050,9 @@
                             </button>
                             <button class="btn btn-secondary" id="exportCouponsBtn">
                                 <i class="fas fa-file-export"></i> Export
+                            </button>
+                            <button class="btn btn-secondary" id="generateCouponsReport">
+                                <i class="fas fa-file-pdf"></i> Report
                             </button>
                         </div>
                     </div>
@@ -1115,7 +1133,7 @@
                     <div class="page-header">
                         <h1 class="page-title">Analytics & Reports</h1>
                         <div class="page-actions">
-                            <button class="btn btn-primary" id="generateReportBtn">
+                            <button class="btn btn-primary" id="generateAnalyticsReport">
                                 <i class="fas fa-file-pdf"></i> Generate Report
                             </button>
                         </div>
@@ -1357,6 +1375,59 @@
         </div>
     </div>
 
+    <!-- Report Options Modal -->
+    <div class="modal-overlay" id="reportOptionsModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Generate Report</h3>
+                <button class="close-btn" id="closeReportModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Report Type</label>
+                    <select class="form-control" id="reportType">
+                        <option value="summary">Summary Report</option>
+                        <option value="detailed">Detailed Report</option>
+                        <option value="custom">Custom Report</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date Range</label>
+                    <div class="date-range-picker">
+                        <input type="date" class="form-control" id="reportStartDate">
+                        <span>to</span>
+                        <input type="date" class="form-control" id="reportEndDate">
+                    </div>
+                </div>
+                
+                <div class="form-group" id="courseFilterGroup">
+                    <label class="form-label">Course Category</label>
+                    <select class="form-control" id="reportCourseFilter">
+                        <option value="all">All Courses</option>
+                        <!-- Course options will be loaded here -->
+                    </select>
+                </div>
+                
+                <div class="form-group" id="statusFilterGroup">
+                    <label class="form-label">Status</label>
+                    <select class="form-control" id="reportStatusFilter">
+                        <option value="all">All Statuses</option>
+                        <option value="sent">Sent</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelReportBtn">Cancel</button>
+                <button class="btn btn-primary" id="generateReportBtn">Generate</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -1368,6 +1439,9 @@
         const itemsPerPage = 10;
         let sessionTimeout = null;
         const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+        
+        // Google Apps Script deployment URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwVp8BecSX-NdPH1jbNwKtYZNJCUzhSbOTy4mVifKt0nzwABvSU_QDYP_ydBCHQz4P4/exec';
         
         // Valid credentials (only one admin user)
         const ADMIN_CREDENTIALS = {
@@ -1388,11 +1462,16 @@
             // Logout button
             document.getElementById('logoutBtn').addEventListener('click', handleLogout);
             
+            // Hamburger menu toggle
+            document.getElementById('hamburgerMenu').addEventListener('click', toggleSidebar);
+            
             // Close buttons for modals
             document.getElementById('closeCouponModal').addEventListener('click', closeAllModals);
             document.getElementById('cancelCouponBtn').addEventListener('click', closeAllModals);
             document.getElementById('successOkBtn').addEventListener('click', closeAllModals);
             document.getElementById('errorOkBtn').addEventListener('click', closeAllModals);
+            document.getElementById('closeReportModal').addEventListener('click', closeAllModals);
+            document.getElementById('cancelReportBtn').addEventListener('click', closeAllModals);
         });
         
         // Authentication functions
@@ -1515,6 +1594,12 @@
             document.getElementById('dashboardPage').style.display = 'block';
         }
         
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('mainContent').classList.toggle('sidebar-open');
+        }
+        
         // Initialize dashboard after successful login
         function initializeDashboard() {
             // Tab navigation
@@ -1586,6 +1671,11 @@
                     // Show selected tab content
                     const tabId = this.getAttribute('data-tab') + '-tab';
                     document.getElementById(tabId).classList.add('active');
+                    
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 768) {
+                        toggleSidebar();
+                    }
                 });
             });
             
@@ -1766,217 +1856,125 @@
             });
         }
         
-        // Data loading functions (mock data for demo)
+        // Data loading functions
         function loadDashboardData() {
             showLoading();
             
-            // Mock data for demo
-            setTimeout(() => {
-                const mockData = {
-                    totalCoupons: 1245,
-                    successEmails: 1180,
-                    couponsChange: 12.5,
-                    emailsChange: 8.3,
-                    topCourse: {
-                        name: "NEET 2024 Complete Course",
-                        count: 342
-                    },
-                    recentActivity: 18,
-                    trends: [
-                        { date: 'Jan 1', count: 45 },
-                        { date: 'Jan 2', count: 52 },
-                        { date: 'Jan 3', count: 38 },
-                        { date: 'Jan 4', count: 61 },
-                        { date: 'Jan 5', count: 55 },
-                        { date: 'Jan 6', count: 48 },
-                        { date: 'Jan 7', count: 67 }
-                    ],
-                    recentCoupons: [
-                        {
-                            id: '1',
-                            timestamp: new Date().getTime() - 10000000,
-                            fullName: 'Rahul Sharma',
-                            email: 'rahul@example.com',
-                            courseCategory: 'NEET 2024 Complete Course',
-                            emailSent: 'Sent'
-                        },
-                        {
-                            id: '2',
-                            timestamp: new Date().getTime() - 20000000,
-                            fullName: 'Priya Patel',
-                            email: 'priya@example.com',
-                            courseCategory: 'JEE Main 2024 Crash Course',
-                            emailSent: 'Sent'
-                        },
-                        {
-                            id: '3',
-                            timestamp: new Date().getTime() - 30000000,
-                            fullName: 'Amit Singh',
-                            email: 'amit@example.com',
-                            courseCategory: 'UPSC Prelims 2024',
-                            emailSent: 'Pending'
-                        },
-                        {
-                            id: '4',
-                            timestamp: new Date().getTime() - 40000000,
-                            fullName: 'Neha Gupta',
-                            email: 'neha@example.com',
-                            courseCategory: 'Class 12 Board Exams',
-                            emailSent: 'Failed'
-                        },
-                        {
-                            id: '5',
-                            timestamp: new Date().getTime() - 50000000,
-                            fullName: 'Vikram Joshi',
-                            email: 'vikram@example.com',
-                            courseCategory: 'NEET 2024 Complete Course',
-                            emailSent: 'Sent'
-                        }
-                    ]
-                };
-                
-                // Update stats
-                document.getElementById('totalCoupons').textContent = mockData.totalCoupons;
-                document.getElementById('successEmails').textContent = mockData.successEmails;
-                document.getElementById('couponsChange').textContent = mockData.couponsChange + '%';
-                document.getElementById('emailsChange').textContent = mockData.emailsChange + '%';
-                
-                if (mockData.topCourse) {
-                    document.getElementById('topCourse').textContent = mockData.topCourse.name;
-                    document.getElementById('topCourseCount').textContent = mockData.topCourse.count + ' enrollments';
-                }
-                
-                document.getElementById('recentActivity').textContent = mockData.recentActivity;
-                
-                // Update charts
-                updateCouponsChart(mockData.trends);
-                updateRecentCouponsTable(mockData.recentCoupons);
-                
-                hideLoading();
-            }, 800);
+            fetch(scriptURL + '?action=getDashboardData')
+                .then(response => response.json())
+                .then(data => {
+                    // Update stats
+                    document.getElementById('totalCoupons').textContent = data.totalCoupons;
+                    document.getElementById('successEmails').textContent = data.successEmails;
+                    document.getElementById('couponsChange').textContent = data.couponsChange + '%';
+                    document.getElementById('emailsChange').textContent = data.emailsChange + '%';
+                    
+                    if (data.topCourse) {
+                        document.getElementById('topCourse').textContent = data.topCourse.name;
+                        document.getElementById('topCourseCount').textContent = data.topCourse.count + ' enrollments';
+                    }
+                    
+                    document.getElementById('recentActivity').textContent = data.recentActivity;
+                    
+                    // Update charts
+                    updateCouponsChart(data.trends);
+                    updateRecentCouponsTable(data.recentCoupons);
+                    
+                    hideLoading();
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('Error', 'Failed to load dashboard data');
+                    console.error('Error:', error);
+                });
         }
         
         function loadCouponsData(page = 1, filters = {}) {
             showLoading();
             currentPage = page;
             
-            // Mock data for demo
-            setTimeout(() => {
-                const mockCoupons = [
-                    {
-                        id: '1',
-                        timestamp: new Date().getTime() - 10000000,
-                        fullName: 'Rahul Sharma',
-                        email: 'rahul@example.com',
-                        mobile: '9876543210',
-                        courseCategory: 'NEET 2024 Complete Course',
-                        courseName: 'NEET Complete Package',
-                        couponCode: 'PWNEET001',
-                        emailSent: 'Sent'
-                    },
-                    {
-                        id: '2',
-                        timestamp: new Date().getTime() - 20000000,
-                        fullName: 'Priya Patel',
-                        email: 'priya@example.com',
-                        mobile: '8765432109',
-                        courseCategory: 'JEE Main 2024 Crash Course',
-                        courseName: 'JEE Main Crash Course',
-                        couponCode: 'PWJEE001',
-                        emailSent: 'Sent'
-                    },
-                    {
-                        id: '3',
-                        timestamp: new Date().getTime() - 30000000,
-                        fullName: 'Amit Singh',
-                        email: 'amit@example.com',
-                        mobile: '7654321098',
-                        courseCategory: 'UPSC Prelims 2024',
-                        courseName: 'UPSC Complete Guide',
-                        couponCode: 'PWUPSC001',
-                        emailSent: 'Pending'
-                    },
-                    {
-                        id: '4',
-                        timestamp: new Date().getTime() - 40000000,
-                        fullName: 'Neha Gupta',
-                        email: 'neha@example.com',
-                        mobile: '6543210987',
-                        courseCategory: 'Class 12 Board Exams',
-                        courseName: 'Class 12 Physics',
-                        couponCode: 'PW12PHY001',
-                        emailSent: 'Failed'
-                    },
-                    {
-                        id: '5',
-                        timestamp: new Date().getTime() - 50000000,
-                        fullName: 'Vikram Joshi',
-                        email: 'vikram@example.com',
-                        mobile: '5432109876',
-                        courseCategory: 'NEET 2024 Complete Course',
-                        courseName: 'NEET Complete Package',
-                        couponCode: 'PWNEET002',
-                        emailSent: 'Sent'
+            const params = new URLSearchParams();
+            params.append('action', 'getCoupons');
+            params.append('page', page);
+            params.append('perPage', itemsPerPage);
+            
+            if (filters.status && filters.status !== 'all') {
+                params.append('status', filters.status);
+            }
+            
+            if (filters.course && filters.course !== 'all') {
+                params.append('course', filters.course);
+            }
+            
+            if (filters.startDate) {
+                params.append('startDate', filters.startDate);
+            }
+            
+            if (filters.endDate) {
+                params.append('endDate', filters.endDate);
+            }
+            
+            fetch(scriptURL + '?' + params.toString())
+                .then(response => response.json())
+                .then(data => {
+                    allCoupons = data.coupons;
+                    updateCouponsTable(data.coupons);
+                    updatePagination(data.total, page);
+                    
+                    // Update course filter options
+                    const courseFilter = document.getElementById('filterCourse');
+                    courseFilter.innerHTML = '<option value="all">All Courses</option>';
+                    
+                    data.courses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course;
+                        option.textContent = course;
+                        courseFilter.appendChild(option);
+                    });
+                    
+                    // Set selected course if filtered
+                    if (filters.course) {
+                        courseFilter.value = filters.course;
                     }
-                ];
-                
-                // Apply filters if any
-                let filteredCoupons = [...mockCoupons];
-                
-                if (filters.status && filters.status !== 'all') {
-                    filteredCoupons = filteredCoupons.filter(c => c.emailSent.toLowerCase() === filters.status.toLowerCase());
-                }
-                
-                if (filters.course && filters.course !== 'all') {
-                    filteredCoupons = filteredCoupons.filter(c => c.courseCategory === filters.course);
-                }
-                
-                // For demo, we'll ignore date filters
-                
-                allCoupons = filteredCoupons;
-                updateCouponsTable(filteredCoupons);
-                updatePagination(filteredCoupons.length, page);
-                
-                // Update course filter options
-                const courseFilter = document.getElementById('filterCourse');
-                courseFilter.innerHTML = '<option value="all">All Courses</option>';
-                
-                const uniqueCourses = [...new Set(mockCoupons.map(c => c.courseCategory))];
-                uniqueCourses.forEach(course => {
-                    const option = document.createElement('option');
-                    option.value = course;
-                    option.textContent = course;
-                    courseFilter.appendChild(option);
+                    
+                    hideLoading();
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('Error', 'Failed to load coupons data');
+                    console.error('Error:', error);
                 });
-                
-                // Set selected course if filtered
-                if (filters.course) {
-                    courseFilter.value = filters.course;
-                }
-                
-                hideLoading();
-            }, 800);
         }
         
         function loadCoursesData() {
-            // Mock data for demo
-            setTimeout(() => {
-                const mockCourses = [
-                    { name: "NEET 2024 Complete Course", count: 342 },
-                    { name: "JEE Main 2024 Crash Course", count: 278 },
-                    { name: "UPSC Prelims 2024", count: 156 },
-                    { name: "Class 12 Board Exams", count: 189 },
-                    { name: "Class 10 Board Exams", count: 132 }
-                ];
-                
-                allCourses = mockCourses;
-                updateCoursesChart(mockCourses);
-                updateConversionChart({
-                    successful: 1180,
-                    failed: 45,
-                    pending: 20
+            fetch(scriptURL + '?action=getCoursesData')
+                .then(response => response.json())
+                .then(data => {
+                    allCourses = data.courses;
+                    updateCoursesChart(data.courses);
+                    updateConversionChart(data.conversion);
+                    
+                    // Update course dropdowns
+                    const courseDropdowns = [
+                        document.getElementById('filterCourse'),
+                        document.getElementById('reportCourseFilter')
+                    ];
+                    
+                    courseDropdowns.forEach(dropdown => {
+                        if (dropdown) {
+                            dropdown.innerHTML = '<option value="all">All Courses</option>';
+                            data.courses.forEach(course => {
+                                const option = document.createElement('option');
+                                option.value = course;
+                                option.textContent = course;
+                                dropdown.appendChild(option);
+                            });
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-            }, 500);
         }
         
         // Table update functions
@@ -2207,13 +2205,34 @@
                 
                 showLoading();
                 
-                // Mock save for demo
-                setTimeout(() => {
-                    showSuccess('Success', 'Coupon added successfully');
-                    loadCouponsData();
-                    closeAllModals();
-                    document.getElementById('couponForm').reset();
-                }, 1000);
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'addCoupon',
+                        data: couponData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccess('Success', 'Coupon added successfully');
+                        loadCouponsData();
+                        closeAllModals();
+                        document.getElementById('couponForm').reset();
+                    } else {
+                        showError('Error', data.message || 'Failed to add coupon');
+                    }
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to add coupon');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    hideLoading();
+                });
             });
             
             // Apply filters
@@ -2231,34 +2250,31 @@
             });
             
             // Export coupons
-            document.getElementById('exportCouponsBtn').addEventListener('click', exportCouponsToPDF);
+            document.getElementById('exportCouponsBtn').addEventListener('click', exportCouponsToCSV);
             
             // Time range selector
             document.getElementById('timeRange').addEventListener('change', function() {
                 const value = this.value;
+                const startDate = document.getElementById('startDate');
+                const endDate = document.getElementById('endDate');
                 
-                // For demo, we'll just show some mock data
-                const mockTrends = {
-                    '7': [
-                        { date: 'Jan 1', count: 45 },
-                        { date: 'Jan 2', count: 52 },
-                        { date: 'Jan 3', count: 38 },
-                        { date: 'Jan 4', count: 61 },
-                        { date: 'Jan 5', count: 55 },
-                        { date: 'Jan 6', count: 48 },
-                        { date: 'Jan 7', count: 67 }
-                    ],
-                    '30': Array.from({length: 30}, (_, i) => ({
-                        date: `Day ${i+1}`,
-                        count: Math.floor(Math.random() * 100) + 20
-                    })),
-                    '90': Array.from({length: 12}, (_, i) => ({
-                        date: `Week ${i+1}`,
-                        count: Math.floor(Math.random() * 300) + 100
-                    }))
-                };
-                
-                updateCouponsChart(mockTrends[value] || mockTrends['7']);
+                if (value === 'custom') {
+                    startDate.style.display = 'block';
+                    endDate.style.display = 'block';
+                } else {
+                    startDate.style.display = 'none';
+                    endDate.style.display = 'none';
+                    
+                    // Load data for selected range
+                    fetch(scriptURL + '?action=getTrends&range=' + value)
+                        .then(response => response.json())
+                        .then(data => {
+                            updateCouponsChart(data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
             });
             
             // Save settings
@@ -2271,15 +2287,75 @@
                 
                 showLoading();
                 
-                // Mock save for demo
-                setTimeout(() => {
-                    showSuccess('Success', 'Settings saved successfully');
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'saveSettings',
+                        data: settings
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccess('Success', 'Settings saved successfully');
+                    } else {
+                        showError('Error', data.message || 'Failed to save settings');
+                    }
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to save settings');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
                     hideLoading();
-                }, 800);
+                });
             });
             
-            // Generate report
-            document.getElementById('generateReportBtn').addEventListener('click', generateAnalyticsReport);
+            // Report generation buttons
+            document.getElementById('generateDashboardReport').addEventListener('click', function() {
+                document.getElementById('reportType').value = 'summary';
+                document.getElementById('reportOptionsModal').classList.add('active');
+            });
+            
+            document.getElementById('generateCouponsReport').addEventListener('click', function() {
+                document.getElementById('reportType').value = 'detailed';
+                document.getElementById('reportOptionsModal').classList.add('active');
+            });
+            
+            document.getElementById('generateAnalyticsReport').addEventListener('click', function() {
+                document.getElementById('reportType').value = 'custom';
+                document.getElementById('reportOptionsModal').classList.add('active');
+            });
+            
+            // Generate report button in modal
+            document.getElementById('generateReportBtn').addEventListener('click', function() {
+                const reportType = document.getElementById('reportType').value;
+                const startDate = document.getElementById('reportStartDate').value;
+                const endDate = document.getElementById('reportEndDate').value;
+                const courseFilter = document.getElementById('reportCourseFilter').value;
+                const statusFilter = document.getElementById('reportStatusFilter').value;
+                
+                showLoading();
+                closeAllModals();
+                
+                fetch(scriptURL + '?action=generateReport&type=' + reportType + 
+                      '&startDate=' + startDate + '&endDate=' + endDate + 
+                      '&course=' + courseFilter + '&status=' + statusFilter)
+                    .then(response => response.json())
+                    .then(data => {
+                        generatePDFReport(data, reportType, startDate, endDate);
+                    })
+                    .catch(error => {
+                        showError('Error', 'Failed to generate report');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        hideLoading();
+                    });
+            });
         }
         
         // Action functions
@@ -2310,11 +2386,32 @@
             
             showLoading();
             
-            // Mock resend for demo
-            setTimeout(() => {
-                showSuccess('Success', 'Coupon email resent successfully');
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'resendCouponEmail',
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Success', 'Coupon email resent successfully');
+                    loadCouponsData(currentPage, getCurrentFilters());
+                } else {
+                    showError('Error', data.message || 'Failed to resend coupon email');
+                }
+            })
+            .catch(error => {
+                showError('Error', 'Failed to resend coupon email');
+                console.error('Error:', error);
+            })
+            .finally(() => {
                 hideLoading();
-            }, 1000);
+            });
         }
         
         function deleteCoupon(id) {
@@ -2324,125 +2421,248 @@
             
             showLoading();
             
-            // Mock delete for demo
-            setTimeout(() => {
-                showSuccess('Success', 'Coupon deleted successfully');
-                loadCouponsData(currentPage, getCurrentFilters());
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'deleteCoupon',
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Success', 'Coupon deleted successfully');
+                    loadCouponsData(currentPage, getCurrentFilters());
+                } else {
+                    showError('Error', data.message || 'Failed to delete coupon');
+                }
+            })
+            .catch(error => {
+                showError('Error', 'Failed to delete coupon');
+                console.error('Error:', error);
+            })
+            .finally(() => {
                 hideLoading();
-            }, 800);
+            });
         }
         
-        // PDF Export functions
-        function exportCouponsToPDF() {
+        // Export functions
+        function exportCouponsToCSV() {
             showLoading();
             
-            // Use jsPDF with autoTable plugin
+            const filters = getCurrentFilters();
+            const params = new URLSearchParams();
+            
+            if (filters.status && filters.status !== 'all') {
+                params.append('status', filters.status);
+            }
+            
+            if (filters.course && filters.course !== 'all') {
+                params.append('course', filters.course);
+            }
+            
+            if (filters.startDate) {
+                params.append('startDate', filters.startDate);
+            }
+            
+            if (filters.endDate) {
+                params.append('endDate', filters.endDate);
+            }
+            
+            params.append('action', 'exportCoupons');
+            
+            fetch(scriptURL + '?' + params.toString())
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'coupons_export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    showError('Error', 'Failed to export coupons');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        function generatePDFReport(data, reportType, startDate, endDate) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Title
+            // Report header
             doc.setFontSize(18);
-            doc.text('Coupons Report', 105, 15, { align: 'center' });
+            doc.setTextColor(40);
+            doc.text('Physics Wallah Coupon System Report', 105, 20, { align: 'center' });
             
-            // Date
+            // Report details
             doc.setFontSize(12);
-            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 25, { align: 'center' });
+            doc.text(`Report Type: ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`, 14, 30);
+            doc.text(`Date Range: ${startDate || 'N/A'} to ${endDate || 'N/A'}`, 14, 40);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 50);
             
-            // Table data
-            const headers = [
-                'Date', 
-                'Name', 
-                'Email', 
-                'Mobile', 
-                'Course', 
-                'Coupon Code', 
-                'Status'
-            ];
+            // Add a line separator
+            doc.setDrawColor(200);
+            doc.setLineWidth(0.5);
+            doc.line(14, 55, 200, 55);
             
-            const data = allCoupons.map(coupon => {
-                const date = new Date(coupon.timestamp);
-                return [
-                    date.toLocaleDateString(),
+            let yPosition = 65;
+            
+            if (reportType === 'summary') {
+                // Summary Report Content
+                doc.setFontSize(16);
+                doc.text('Summary Statistics', 105, yPosition, { align: 'center' });
+                yPosition += 15;
+                
+                doc.setFontSize(12);
+                doc.text(`Total Coupons Sent: ${data.totalCoupons}`, 14, yPosition);
+                yPosition += 10;
+                doc.text(`Successful Emails: ${data.successEmails}`, 14, yPosition);
+                yPosition += 10;
+                doc.text(`Top Course: ${data.topCourse.name} (${data.topCourse.count} enrollments)`, 14, yPosition);
+                yPosition += 10;
+                doc.text(`Recent Activity: ${data.recentActivity} coupons today`, 14, yPosition);
+                yPosition += 20;
+                
+                // Add chart image if available
+                if (data.chartImage) {
+                    try {
+                        doc.addImage(data.chartImage, 'PNG', 30, yPosition, 150, 80);
+                        yPosition += 90;
+                    } catch (e) {
+                        console.error('Error adding chart image:', e);
+                    }
+                }
+                
+                // Recent Coupons table
+                yPosition += 10;
+                doc.setFontSize(14);
+                doc.text('Recent Coupons', 14, yPosition);
+                yPosition += 10;
+                
+                const recentCoupons = data.recentCoupons || [];
+                const recentCouponsData = recentCoupons.map(coupon => [
+                    new Date(coupon.timestamp).toLocaleDateString(),
+                    coupon.fullName,
+                    coupon.email,
+                    coupon.courseCategory,
+                    coupon.emailSent
+                ]);
+                
+                doc.autoTable({
+                    startY: yPosition,
+                    head: [['Date', 'Name', 'Email', 'Course', 'Status']],
+                    body: recentCouponsData,
+                    margin: { left: 14 },
+                    styles: { fontSize: 9 }
+                });
+                
+            } else if (reportType === 'detailed') {
+                // Detailed Coupons Report
+                doc.setFontSize(16);
+                doc.text('Detailed Coupons Report', 105, yPosition, { align: 'center' });
+                yPosition += 15;
+                
+                const coupons = data.coupons || [];
+                const couponsData = coupons.map(coupon => [
+                    new Date(coupon.timestamp).toLocaleDateString(),
                     coupon.fullName,
                     coupon.email,
                     coupon.mobile,
                     coupon.courseCategory,
                     coupon.couponCode,
                     coupon.emailSent
-                ];
-            });
-            
-            // Add table
-            doc.autoTable({
-                head: [headers],
-                body: data,
-                startY: 30,
-                styles: {
-                    fontSize: 9,
-                    cellPadding: 3,
-                    valign: 'middle'
-                },
-                headStyles: {
-                    fillColor: [26, 26, 26],
-                    textColor: 255,
-                    fontStyle: 'bold'
-                },
-                alternateRowStyles: {
-                    fillColor: [245, 243, 240]
+                ]);
+                
+                doc.autoTable({
+                    startY: yPosition,
+                    head: [['Date', 'Name', 'Email', 'Mobile', 'Course', 'Coupon Code', 'Status']],
+                    body: couponsData,
+                    margin: { left: 14 },
+                    styles: { fontSize: 8 },
+                    columnStyles: {
+                        0: { cellWidth: 20 },
+                        1: { cellWidth: 25 },
+                        2: { cellWidth: 30 },
+                        3: { cellWidth: 20 },
+                        4: { cellWidth: 30 },
+                        5: { cellWidth: 25 },
+                        6: { cellWidth: 20 }
+                    }
+                });
+                
+            } else if (reportType === 'custom') {
+                // Custom Analytics Report
+                doc.setFontSize(16);
+                doc.text('Custom Analytics Report', 105, yPosition, { align: 'center' });
+                yPosition += 15;
+                
+                // Summary stats
+                doc.setFontSize(12);
+                doc.text(`Total Coupons: ${data.totalCoupons}`, 14, yPosition);
+                yPosition += 10;
+                doc.text(`Successful Emails: ${data.successEmails}`, 14, yPosition);
+                yPosition += 10;
+                doc.text(`Pending Emails: ${data.pendingEmails}`, 14, yPosition);
+                yPosition += 10;
+                doc.text(`Failed Emails: ${data.failedEmails}`, 14, yPosition);
+                yPosition += 20;
+                
+                // Course popularity chart
+                if (data.coursesChartImage) {
+                    try {
+                        doc.addImage(data.coursesChartImage, 'PNG', 30, yPosition, 150, 80);
+                        yPosition += 90;
+                    } catch (e) {
+                        console.error('Error adding courses chart image:', e);
+                    }
                 }
-            });
+                
+                // Conversion chart
+                if (data.conversionChartImage) {
+                    try {
+                        doc.addPage();
+                        yPosition = 20;
+                        doc.addImage(data.conversionChartImage, 'PNG', 30, yPosition, 150, 80);
+                        yPosition += 90;
+                    } catch (e) {
+                        console.error('Error adding conversion chart image:', e);
+                    }
+                }
+                
+                // Top courses table
+                doc.setFontSize(14);
+                doc.text('Top Courses', 14, yPosition);
+                yPosition += 10;
+                
+                const topCourses = data.topCourses || [];
+                const topCoursesData = topCourses.map(course => [
+                    course.name,
+                    course.count,
+                    course.percentage + '%'
+                ]);
+                
+                doc.autoTable({
+                    startY: yPosition,
+                    head: [['Course', 'Count', 'Percentage']],
+                    body: topCoursesData,
+                    margin: { left: 14 },
+                    styles: { fontSize: 10 }
+                });
+            }
             
             // Save the PDF
-            doc.save('PW_Coupons_Report.pdf');
-            hideLoading();
-        }
-        
-        function generateAnalyticsReport() {
-            showLoading();
-            
-            // Use jsPDF with autoTable plugin
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Title
-            doc.setFontSize(18);
-            doc.text('Analytics Report', 105, 15, { align: 'center' });
-            
-            // Date
-            doc.setFontSize(12);
-            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 25, { align: 'center' });
-            
-            // Summary stats
-            doc.setFontSize(14);
-            doc.text('Summary Statistics', 14, 35);
-            
-            doc.setFontSize(12);
-            doc.text(`Total Coupons Sent: ${document.getElementById('totalCoupons').textContent}`, 14, 45);
-            doc.text(`Successful Emails: ${document.getElementById('successEmails').textContent}`, 14, 55);
-            doc.text(`Top Course: ${document.getElementById('topCourse').textContent} (${document.getElementById('topCourseCount').textContent})`, 14, 65);
-            
-            // Course popularity chart
-            doc.addPage();
-            doc.setFontSize(14);
-            doc.text('Course Popularity', 105, 15, { align: 'center' });
-            
-            // Get the canvas element and convert to image
-            const canvas = document.getElementById('coursesChart');
-            const imgData = canvas.toDataURL('image/png');
-            doc.addImage(imgData, 'PNG', 30, 25, 150, 75);
-            
-            // Conversion rates
-            doc.addPage();
-            doc.setFontSize(14);
-            doc.text('Conversion Rates', 105, 15, { align: 'center' });
-            
-            const canvas2 = document.getElementById('conversionChart');
-            const imgData2 = canvas2.toDataURL('image/png');
-            doc.addImage(imgData2, 'PNG', 30, 25, 150, 75);
-            
-            // Save the PDF
-            doc.save('PW_Analytics_Report.pdf');
-            hideLoading();
+            const reportName = `PW_${reportType.charAt(0).toUpperCase() + reportType.slice(1)}_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
+            doc.save(reportName);
         }
     </script>
 </body>
