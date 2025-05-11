@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root {
             --primary: #1a1a1a;
@@ -750,20 +752,6 @@
             margin-bottom: 0;
         }
         
-        /* Success/Error Icons */
-        .modal-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .success-icon {
-            color: var(--success);
-        }
-        
-        .error-icon {
-            color: var(--danger);
-        }
-        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -904,8 +892,8 @@
                 
                 <div class="header-right">
                     <div class="user-info">
-                        <div class="user-avatar" id="userInitials">Y</div>
-                        <span id="userEmail">Yugal</span>
+                        <div class="user-avatar" id="userInitials"></div>
+                        <span id="userEmail"></span>
                     </div>
                     <button class="logout-btn" id="logoutBtn">
                         <i class="fas fa-sign-out-alt"></i>
@@ -1207,29 +1195,53 @@
         .header { background-color: #1a1a1a; color: white; padding: 20px; text-align: center; }
         .content { padding: 20px; background-color: #f9f9f9; }
         .footer { padding: 20px; text-align: center; font-size: 12px; color: #777; }
-        .coupon-code { font-size: 24px; font-weight: bold; color: #1a1a1a; text-align: center; margin: 20px 0; }
-        .button { display: inline-block; padding: 10px 20px; background-color: #1a1a1a; color: white; text-decoration: none; border-radius: 4px; }
+        .coupon-code { 
+            background-color: #f5f3f0; 
+            border: 2px dashed #666; 
+            padding: 15px; 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Your Exclusive Discount</h1>
+            <h1>Physics Wallah</h1>
+            <p>Exclusive Discount Coupon</p>
         </div>
+        
         <div class="content">
-            <p>Dear {name},</p>
-            <p>Thank you for your interest in our {course} course. Here's your exclusive discount coupon:</p>
-            <div class="coupon-code">{coupon_code}</div>
-            <p>Use this code at checkout to get your discount. This offer is valid for a limited time only.</p>
-            <p style="text-align: center;">
-                <a href="https://www.pw.live" class="button">Enroll Now</a>
-            </p>
-            <p>If you have any questions, please don't hesitate to contact us.</p>
+            <h2>Hello {student_name},</h2>
+            <p>Thank you for your interest in our {course_name} course. Here's your exclusive discount coupon:</p>
+            
+            <div class="coupon-code">
+                {coupon_code}
+            </div>
+            
+            <p>Use this coupon code during checkout to get your discount. This offer is valid for a limited time only.</p>
+            
+            <a href="https://www.pw.live" class="btn">Enroll Now</a>
+            
+            <p>If you have any questions, please don't hesitate to contact our support team.</p>
+            
             <p>Best regards,<br>The Physics Wallah Team</p>
         </div>
+        
         <div class="footer">
-            <p>© 2023 Physics Wallah. All rights reserved.</p>
-            <p>If you didn't request this coupon, please ignore this email.</p>
+            <p>&copy; 2023 Physics Wallah. All rights reserved.</p>
+            <p>If you did not request this coupon, please ignore this email.</p>
         </div>
     </div>
 </body>
@@ -1239,39 +1251,11 @@
                             
                             <div class="form-group">
                                 <label class="form-label">Default Coupon Code</label>
-                                <input type="text" class="form-control" id="defaultCouponCode" value="YUGNA00001">
+                                <input type="text" class="form-control" id="defaultCouponCode" value="PWSTUDENT">
                             </div>
                             
                             <button class="btn btn-primary" id="saveSettingsBtn">
                                 <i class="fas fa-save"></i> Save Settings
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">System Configuration</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="form-label">Google Drive Folder URL</label>
-                                <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/your-folder">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Data Retention (Days)</label>
-                                <input type="number" class="form-control" id="dataRetention" value="365">
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="enableNotifications">
-                                    <label class="form-check-label" for="enableNotifications">Enable Email Notifications</label>
-                                </div>
-                            </div>
-                            
-                            <button class="btn btn-primary" id="saveConfigBtn">
-                                <i class="fas fa-save"></i> Save Configuration
                             </button>
                         </div>
                     </div>
@@ -1293,44 +1277,37 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="couponName" required>
+                            <input type="text" id="couponName" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="couponEmail" required>
+                            <input type="email" id="couponEmail" class="form-control" required>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Mobile Number</label>
-                            <input type="tel" class="form-control" id="couponMobile" required>
+                            <input type="tel" id="couponMobile" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Course Category</label>
-                            <select class="form-control" id="couponCategory" required>
-                                <!-- Options will be loaded here -->
-                            </select>
+                            <label class="form-label">Course Name</label>
+                            <input type="text" id="couponCourseName" class="form-control" required>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Course Name</label>
-                            <input type="text" class="form-control" id="couponCourseName" required>
+                            <label class="form-label">Coupon Code</label>
+                            <input type="text" id="couponCode" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Coupon Code</label>
-                            <input type="text" class="form-control" id="couponCode" required>
+                            <label class="form-label">Send Email Notification</label>
+                            <select class="form-control" id="couponSendEmail">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Send Email Notification</label>
-                        <select class="form-control" id="couponSendEmail">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
                     </div>
                 </form>
             </div>
@@ -1356,7 +1333,7 @@
     <div class="modal-overlay" id="successModal">
         <div class="modal-container" style="max-width: 400px; text-align: center;">
             <div class="modal-body">
-                <div class="modal-icon success-icon">
+                <div style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;">
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <h4 id="successTitle">Success!</h4>
@@ -1370,7 +1347,7 @@
     <div class="modal-overlay" id="errorModal">
         <div class="modal-container" style="max-width: 400px; text-align: center;">
             <div class="modal-body">
-                <div class="modal-icon error-icon">
+                <div style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;">
                     <i class="fas fa-exclamation-circle"></i>
                 </div>
                 <h4 id="errorTitle">Error!</h4>
@@ -1382,22 +1359,17 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Global variables
-        let currentUser = {};
+        let currentUser = null;
         let allCoupons = [];
         let allCourses = [];
         let currentPage = 1;
         const itemsPerPage = 10;
-        let sessionTimeout;
+        let sessionTimeout = null;
         const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
         
-        // Google Apps Script deployment URL
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwVp8BecSX-NdPH1jbNwKtYZNJCUzhSbOTy4mVifKt0nzwABvSU_QDYP_ydBCHQz4P4/exec';
-        
-        // Hardcoded credentials (single admin user)
+        // Valid credentials (only one admin user)
         const ADMIN_CREDENTIALS = {
             username: "Yugal",
             password: "Yugal11jan911@"
@@ -1414,64 +1386,77 @@
             });
             
             // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                handleLogout();
-            });
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            
+            // Close buttons for modals
+            document.getElementById('closeCouponModal').addEventListener('click', closeAllModals);
+            document.getElementById('cancelCouponBtn').addEventListener('click', closeAllModals);
+            document.getElementById('successOkBtn').addEventListener('click', closeAllModals);
+            document.getElementById('errorOkBtn').addEventListener('click', closeAllModals);
         });
         
         // Authentication functions
         function checkAuthStatus() {
-            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-            const loginTime = parseInt(sessionStorage.getItem('loginTime'));
-            const currentTime = new Date().getTime();
+            const sessionData = localStorage.getItem('adminSession');
             
-            if (isLoggedIn && loginTime && (currentTime - loginTime < SESSION_DURATION)) {
-                // User is logged in and session is valid
-                currentUser = {
-                    name: ADMIN_CREDENTIALS.username,
-                    email: ADMIN_CREDENTIALS.username.toLowerCase() + "@admin.com"
-                };
+            if (sessionData) {
+                const session = JSON.parse(sessionData);
+                const now = new Date().getTime();
                 
-                // Update UI with actual user info
-                document.getElementById('userInitials').textContent = getInitials(currentUser.name);
-                document.getElementById('userEmail').textContent = currentUser.name;
-                
-                // Show dashboard
-                showDashboard();
-                
-                // Initialize dashboard
-                initializeDashboard();
-                
-                // Reset session timer
-                resetSessionTimer();
+                // Check if session is still valid
+                if (now < session.expires) {
+                    currentUser = {
+                        username: session.username,
+                        email: session.email || `${session.username}@admin.com`
+                    };
+                    
+                    // Update UI with user info
+                    document.getElementById('userInitials').textContent = getInitials(currentUser.username);
+                    document.getElementById('userEmail').textContent = currentUser.email;
+                    
+                    // Show dashboard
+                    showDashboard();
+                    
+                    // Initialize dashboard
+                    initializeDashboard();
+                    
+                    // Start session timer
+                    startSessionTimer(session.expires - now);
+                } else {
+                    // Session expired
+                    localStorage.removeItem('adminSession');
+                    showLogin();
+                }
             } else {
-                // User is not logged in or session expired
-                sessionStorage.removeItem('isLoggedIn');
-                sessionStorage.removeItem('loginTime');
+                // No session found
                 showLogin();
             }
         }
         
         function handleLogin() {
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const errorElement = document.getElementById('loginError');
             
             // Validate credentials
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                // Successful login
-                sessionStorage.setItem('isLoggedIn', 'true');
-                sessionStorage.setItem('loginTime', new Date().getTime().toString());
+                // Successful login - create session
+                const session = {
+                    username: ADMIN_CREDENTIALS.username,
+                    expires: new Date().getTime() + SESSION_DURATION
+                };
+                
+                localStorage.setItem('adminSession', JSON.stringify(session));
                 
                 // Set current user
                 currentUser = {
-                    name: ADMIN_CREDENTIALS.username,
-                    email: ADMIN_CREDENTIALS.username.toLowerCase() + "@admin.com"
+                    username: session.username,
+                    email: `${session.username}@admin.com`
                 };
                 
-                // Update UI with actual user info
-                document.getElementById('userInitials').textContent = getInitials(currentUser.name);
-                document.getElementById('userEmail').textContent = currentUser.name;
+                // Update UI
+                document.getElementById('userInitials').textContent = getInitials(currentUser.username);
+                document.getElementById('userEmail').textContent = currentUser.email;
                 
                 // Hide login error if shown
                 errorElement.style.display = 'none';
@@ -1483,7 +1468,7 @@
                 initializeDashboard();
                 
                 // Start session timer
-                resetSessionTimer();
+                startSessionTimer(SESSION_DURATION);
             } else {
                 // Failed login
                 errorElement.style.display = 'block';
@@ -1492,9 +1477,13 @@
         
         function handleLogout() {
             // Clear session
-            sessionStorage.removeItem('isLoggedIn');
-            sessionStorage.removeItem('loginTime');
-            clearTimeout(sessionTimeout);
+            localStorage.removeItem('adminSession');
+            
+            // Clear session timer
+            if (sessionTimeout) {
+                clearTimeout(sessionTimeout);
+                sessionTimeout = null;
+            }
             
             // Show login page
             showLogin();
@@ -1503,15 +1492,17 @@
             document.getElementById('loginForm').reset();
         }
         
-        function resetSessionTimer() {
-            // Clear existing timeout if any
-            clearTimeout(sessionTimeout);
+        function startSessionTimer(duration) {
+            // Clear any existing timer
+            if (sessionTimeout) {
+                clearTimeout(sessionTimeout);
+            }
             
-            // Set new timeout
-            sessionTimeout = setTimeout(function() {
-                alert('Your session has expired due to inactivity. Please login again.');
+            // Set new timer
+            sessionTimeout = setTimeout(() => {
+                showSuccess('Session Expired', 'Your session has expired. Please login again.');
                 handleLogout();
-            }, SESSION_DURATION);
+            }, duration);
         }
         
         function showLogin() {
@@ -1536,20 +1527,14 @@
             loadDashboardData();
             loadCouponsData();
             loadCoursesData();
-            loadSettings();
             
             // Event listeners
             setupEventListeners();
-            
-            // Reset session timer on any user activity
-            document.addEventListener('click', resetSessionTimer);
-            document.addEventListener('keypress', resetSessionTimer);
-            document.addEventListener('scroll', resetSessionTimer);
         }
         
         // Helper functions
         function getInitials(name) {
-            return name ? name.charAt(0).toUpperCase() : '';
+            return name.split(' ').map(n => n[0]).join('').toUpperCase();
         }
         
         function showLoading() {
@@ -1781,138 +1766,217 @@
             });
         }
         
-        // Data loading functions
+        // Data loading functions (mock data for demo)
         function loadDashboardData() {
             showLoading();
             
-            fetch(scriptURL + '?action=getDashboardData')
-                .then(response => response.json())
-                .then(data => {
-                    // Update stats
-                    document.getElementById('totalCoupons').textContent = data.totalCoupons;
-                    document.getElementById('successEmails').textContent = data.successEmails;
-                    document.getElementById('couponsChange').textContent = data.couponsChange + '%';
-                    document.getElementById('emailsChange').textContent = data.emailsChange + '%';
-                    
-                    if (data.topCourse) {
-                        document.getElementById('topCourse').textContent = data.topCourse.name;
-                        document.getElementById('topCourseCount').textContent = data.topCourse.count + ' enrollments';
-                    }
-                    
-                    document.getElementById('recentActivity').textContent = data.recentActivity;
-                    
-                    // Update charts
-                    updateCouponsChart(data.trends);
-                    updateRecentCouponsTable(data.recentCoupons);
-                    
-                    hideLoading();
-                })
-                .catch(error => {
-                    hideLoading();
-                    showError('Error', 'Failed to load dashboard data');
-                    console.error('Error:', error);
-                });
+            // Mock data for demo
+            setTimeout(() => {
+                const mockData = {
+                    totalCoupons: 1245,
+                    successEmails: 1180,
+                    couponsChange: 12.5,
+                    emailsChange: 8.3,
+                    topCourse: {
+                        name: "NEET 2024 Complete Course",
+                        count: 342
+                    },
+                    recentActivity: 18,
+                    trends: [
+                        { date: 'Jan 1', count: 45 },
+                        { date: 'Jan 2', count: 52 },
+                        { date: 'Jan 3', count: 38 },
+                        { date: 'Jan 4', count: 61 },
+                        { date: 'Jan 5', count: 55 },
+                        { date: 'Jan 6', count: 48 },
+                        { date: 'Jan 7', count: 67 }
+                    ],
+                    recentCoupons: [
+                        {
+                            id: '1',
+                            timestamp: new Date().getTime() - 10000000,
+                            fullName: 'Rahul Sharma',
+                            email: 'rahul@example.com',
+                            courseCategory: 'NEET 2024 Complete Course',
+                            emailSent: 'Sent'
+                        },
+                        {
+                            id: '2',
+                            timestamp: new Date().getTime() - 20000000,
+                            fullName: 'Priya Patel',
+                            email: 'priya@example.com',
+                            courseCategory: 'JEE Main 2024 Crash Course',
+                            emailSent: 'Sent'
+                        },
+                        {
+                            id: '3',
+                            timestamp: new Date().getTime() - 30000000,
+                            fullName: 'Amit Singh',
+                            email: 'amit@example.com',
+                            courseCategory: 'UPSC Prelims 2024',
+                            emailSent: 'Pending'
+                        },
+                        {
+                            id: '4',
+                            timestamp: new Date().getTime() - 40000000,
+                            fullName: 'Neha Gupta',
+                            email: 'neha@example.com',
+                            courseCategory: 'Class 12 Board Exams',
+                            emailSent: 'Failed'
+                        },
+                        {
+                            id: '5',
+                            timestamp: new Date().getTime() - 50000000,
+                            fullName: 'Vikram Joshi',
+                            email: 'vikram@example.com',
+                            courseCategory: 'NEET 2024 Complete Course',
+                            emailSent: 'Sent'
+                        }
+                    ]
+                };
+                
+                // Update stats
+                document.getElementById('totalCoupons').textContent = mockData.totalCoupons;
+                document.getElementById('successEmails').textContent = mockData.successEmails;
+                document.getElementById('couponsChange').textContent = mockData.couponsChange + '%';
+                document.getElementById('emailsChange').textContent = mockData.emailsChange + '%';
+                
+                if (mockData.topCourse) {
+                    document.getElementById('topCourse').textContent = mockData.topCourse.name;
+                    document.getElementById('topCourseCount').textContent = mockData.topCourse.count + ' enrollments';
+                }
+                
+                document.getElementById('recentActivity').textContent = mockData.recentActivity;
+                
+                // Update charts
+                updateCouponsChart(mockData.trends);
+                updateRecentCouponsTable(mockData.recentCoupons);
+                
+                hideLoading();
+            }, 800);
         }
         
         function loadCouponsData(page = 1, filters = {}) {
             showLoading();
             currentPage = page;
             
-            const params = new URLSearchParams();
-            params.append('action', 'getCoupons');
-            params.append('page', page);
-            params.append('perPage', itemsPerPage);
-            
-            if (filters.status && filters.status !== 'all') {
-                params.append('status', filters.status);
-            }
-            
-            if (filters.course && filters.course !== 'all') {
-                params.append('course', filters.course);
-            }
-            
-            if (filters.startDate) {
-                params.append('startDate', filters.startDate);
-            }
-            
-            if (filters.endDate) {
-                params.append('endDate', filters.endDate);
-            }
-            
-            fetch(scriptURL + '?' + params.toString())
-                .then(response => response.json())
-                .then(data => {
-                    allCoupons = data.coupons;
-                    updateCouponsTable(data.coupons);
-                    updatePagination(data.total, page);
-                    
-                    // Update course filter options
-                    const courseFilter = document.getElementById('filterCourse');
-                    courseFilter.innerHTML = '<option value="all">All Courses</option>';
-                    
-                    data.courses.forEach(course => {
-                        const option = document.createElement('option');
-                        option.value = course;
-                        option.textContent = course;
-                        courseFilter.appendChild(option);
-                    });
-                    
-                    hideLoading();
-                })
-                .catch(error => {
-                    hideLoading();
-                    showError('Error', 'Failed to load coupons data');
-                    console.error('Error:', error);
+            // Mock data for demo
+            setTimeout(() => {
+                const mockCoupons = [
+                    {
+                        id: '1',
+                        timestamp: new Date().getTime() - 10000000,
+                        fullName: 'Rahul Sharma',
+                        email: 'rahul@example.com',
+                        mobile: '9876543210',
+                        courseCategory: 'NEET 2024 Complete Course',
+                        courseName: 'NEET Complete Package',
+                        couponCode: 'PWNEET001',
+                        emailSent: 'Sent'
+                    },
+                    {
+                        id: '2',
+                        timestamp: new Date().getTime() - 20000000,
+                        fullName: 'Priya Patel',
+                        email: 'priya@example.com',
+                        mobile: '8765432109',
+                        courseCategory: 'JEE Main 2024 Crash Course',
+                        courseName: 'JEE Main Crash Course',
+                        couponCode: 'PWJEE001',
+                        emailSent: 'Sent'
+                    },
+                    {
+                        id: '3',
+                        timestamp: new Date().getTime() - 30000000,
+                        fullName: 'Amit Singh',
+                        email: 'amit@example.com',
+                        mobile: '7654321098',
+                        courseCategory: 'UPSC Prelims 2024',
+                        courseName: 'UPSC Complete Guide',
+                        couponCode: 'PWUPSC001',
+                        emailSent: 'Pending'
+                    },
+                    {
+                        id: '4',
+                        timestamp: new Date().getTime() - 40000000,
+                        fullName: 'Neha Gupta',
+                        email: 'neha@example.com',
+                        mobile: '6543210987',
+                        courseCategory: 'Class 12 Board Exams',
+                        courseName: 'Class 12 Physics',
+                        couponCode: 'PW12PHY001',
+                        emailSent: 'Failed'
+                    },
+                    {
+                        id: '5',
+                        timestamp: new Date().getTime() - 50000000,
+                        fullName: 'Vikram Joshi',
+                        email: 'vikram@example.com',
+                        mobile: '5432109876',
+                        courseCategory: 'NEET 2024 Complete Course',
+                        courseName: 'NEET Complete Package',
+                        couponCode: 'PWNEET002',
+                        emailSent: 'Sent'
+                    }
+                ];
+                
+                // Apply filters if any
+                let filteredCoupons = [...mockCoupons];
+                
+                if (filters.status && filters.status !== 'all') {
+                    filteredCoupons = filteredCoupons.filter(c => c.emailSent.toLowerCase() === filters.status.toLowerCase());
+                }
+                
+                if (filters.course && filters.course !== 'all') {
+                    filteredCoupons = filteredCoupons.filter(c => c.courseCategory === filters.course);
+                }
+                
+                // For demo, we'll ignore date filters
+                
+                allCoupons = filteredCoupons;
+                updateCouponsTable(filteredCoupons);
+                updatePagination(filteredCoupons.length, page);
+                
+                // Update course filter options
+                const courseFilter = document.getElementById('filterCourse');
+                courseFilter.innerHTML = '<option value="all">All Courses</option>';
+                
+                const uniqueCourses = [...new Set(mockCoupons.map(c => c.courseCategory))];
+                uniqueCourses.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course;
+                    option.textContent = course;
+                    courseFilter.appendChild(option);
                 });
+                
+                // Set selected course if filtered
+                if (filters.course) {
+                    courseFilter.value = filters.course;
+                }
+                
+                hideLoading();
+            }, 800);
         }
         
         function loadCoursesData() {
-            fetch(scriptURL + '?action=getCoursesData')
-                .then(response => response.json())
-                .then(data => {
-                    allCourses = data.courses;
-                    updateCoursesChart(data.courses);
-                    updateConversionChart(data.conversion);
-                    
-                    // Update course dropdowns
-                    const courseDropdowns = [
-                        document.getElementById('couponCategory'),
-                        document.getElementById('filterCourse')
-                    ];
-                    
-                    courseDropdowns.forEach(dropdown => {
-                        if (dropdown) {
-                            dropdown.innerHTML = '';
-                            data.courses.forEach(course => {
-                                const option = document.createElement('option');
-                                option.value = course.name;
-                                option.textContent = course.name;
-                                dropdown.appendChild(option);
-                            });
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+            // Mock data for demo
+            setTimeout(() => {
+                const mockCourses = [
+                    { name: "NEET 2024 Complete Course", count: 342 },
+                    { name: "JEE Main 2024 Crash Course", count: 278 },
+                    { name: "UPSC Prelims 2024", count: 156 },
+                    { name: "Class 12 Board Exams", count: 189 },
+                    { name: "Class 10 Board Exams", count: 132 }
+                ];
+                
+                allCourses = mockCourses;
+                updateCoursesChart(mockCourses);
+                updateConversionChart({
+                    successful: 1180,
+                    failed: 45,
+                    pending: 20
                 });
-        }
-        
-        function loadSettings() {
-            fetch(scriptURL + '?action=getSettings')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.settings) {
-                        document.getElementById('emailSubject').value = data.settings.emailSubject || '';
-                        document.getElementById('emailBody').value = data.settings.emailBody || '';
-                        document.getElementById('defaultCouponCode').value = data.settings.defaultCouponCode || '';
-                        document.getElementById('driveFolderUrl').value = data.settings.driveFolderUrl || '';
-                        document.getElementById('dataRetention').value = data.settings.dataRetention || '365';
-                        document.getElementById('enableNotifications').checked = data.settings.enableNotifications || false;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            }, 500);
         }
         
         // Table update functions
@@ -2080,7 +2144,7 @@
             const nextBtn = pagination.querySelector('[data-page="next"]');
             
             prevBtn.classList.toggle('disabled', currentPage === 1);
-            nextBtn.classList.toggle('disabled', currentPage === totalPages);
+            nextBtn.classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
             
             prevBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -2109,15 +2173,6 @@
         
         // Event listeners setup
         function setupEventListeners() {
-            // Close buttons
-            document.querySelectorAll('.close-btn, .btn-secondary[id$="Btn"]').forEach(btn => {
-                btn.addEventListener('click', closeAllModals);
-            });
-            
-            // OK buttons for success/error modals
-            document.getElementById('successOkBtn').addEventListener('click', closeAllModals);
-            document.getElementById('errorOkBtn').addEventListener('click', closeAllModals);
-            
             // Refresh dashboard
             document.getElementById('refreshDashboard').addEventListener('click', loadDashboardData);
             
@@ -2129,6 +2184,8 @@
             // Add coupon button
             document.getElementById('addCouponBtn').addEventListener('click', function() {
                 document.getElementById('addCouponModal').classList.add('active');
+                // Set default coupon code
+                document.getElementById('couponCode').value = document.getElementById('defaultCouponCode').value;
             });
             
             // Save coupon button
@@ -2138,46 +2195,25 @@
                     email: document.getElementById('couponEmail').value,
                     mobile: document.getElementById('couponMobile').value,
                     courseName: document.getElementById('couponCourseName').value,
-                    courseCategory: document.getElementById('couponCategory').value,
                     couponCode: document.getElementById('couponCode').value,
                     sendEmail: document.getElementById('couponSendEmail').value
                 };
                 
                 if (!couponData.fullName || !couponData.email || !couponData.mobile || 
-                    !couponData.courseName || !couponData.courseCategory || !couponData.couponCode) {
+                    !couponData.courseName || !couponData.couponCode) {
                     showError('Error', 'Please fill all required fields');
                     return;
                 }
                 
                 showLoading();
                 
-                fetch(scriptURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'addCoupon',
-                        data: couponData
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showSuccess('Success', 'Coupon added successfully');
-                        loadCouponsData();
-                        closeAllModals();
-                    } else {
-                        showError('Error', data.message || 'Failed to add coupon');
-                    }
-                })
-                .catch(error => {
-                    showError('Error', 'Failed to add coupon');
-                    console.error('Error:', error);
-                })
-                .finally(() => {
-                    hideLoading();
-                });
+                // Mock save for demo
+                setTimeout(() => {
+                    showSuccess('Success', 'Coupon added successfully');
+                    loadCouponsData();
+                    closeAllModals();
+                    document.getElementById('couponForm').reset();
+                }, 1000);
             });
             
             // Apply filters
@@ -2195,64 +2231,34 @@
             });
             
             // Export coupons
-            document.getElementById('exportCouponsBtn').addEventListener('click', function() {
-                showLoading();
-                
-                const filters = getCurrentFilters();
-                const params = new URLSearchParams();
-                
-                if (filters.status && filters.status !== 'all') {
-                    params.append('status', filters.status);
-                }
-                
-                if (filters.course && filters.course !== 'all') {
-                    params.append('course', filters.course);
-                }
-                
-                if (filters.startDate) {
-                    params.append('startDate', filters.startDate);
-                }
-                
-                if (filters.endDate) {
-                    params.append('endDate', filters.endDate);
-                }
-                
-                params.append('action', 'exportCoupons');
-                
-                fetch(scriptURL + '?' + params.toString())
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'coupons_export.csv';
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    })
-                    .catch(error => {
-                        showError('Error', 'Failed to export coupons');
-                        console.error('Error:', error);
-                    })
-                    .finally(() => {
-                        hideLoading();
-                    });
-            });
+            document.getElementById('exportCouponsBtn').addEventListener('click', exportCouponsToPDF);
             
             // Time range selector
             document.getElementById('timeRange').addEventListener('change', function() {
                 const value = this.value;
                 
-                // Load data for selected range
-                fetch(scriptURL + '?action=getTrends&range=' + value)
-                    .then(response => response.json())
-                    .then(data => {
-                        updateCouponsChart(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                // For demo, we'll just show some mock data
+                const mockTrends = {
+                    '7': [
+                        { date: 'Jan 1', count: 45 },
+                        { date: 'Jan 2', count: 52 },
+                        { date: 'Jan 3', count: 38 },
+                        { date: 'Jan 4', count: 61 },
+                        { date: 'Jan 5', count: 55 },
+                        { date: 'Jan 6', count: 48 },
+                        { date: 'Jan 7', count: 67 }
+                    ],
+                    '30': Array.from({length: 30}, (_, i) => ({
+                        date: `Day ${i+1}`,
+                        count: Math.floor(Math.random() * 100) + 20
+                    })),
+                    '90': Array.from({length: 12}, (_, i) => ({
+                        date: `Week ${i+1}`,
+                        count: Math.floor(Math.random() * 300) + 100
+                    }))
+                };
+                
+                updateCouponsChart(mockTrends[value] || mockTrends['7']);
             });
             
             // Save settings
@@ -2265,72 +2271,15 @@
                 
                 showLoading();
                 
-                fetch(scriptURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'saveSettings',
-                        data: settings
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showSuccess('Success', 'Settings saved successfully');
-                    } else {
-                        showError('Error', data.message || 'Failed to save settings');
-                    }
-                })
-                .catch(error => {
-                    showError('Error', 'Failed to save settings');
-                    console.error('Error:', error);
-                })
-                .finally(() => {
+                // Mock save for demo
+                setTimeout(() => {
+                    showSuccess('Success', 'Settings saved successfully');
                     hideLoading();
-                });
-            });
-            
-            // Save config
-            document.getElementById('saveConfigBtn').addEventListener('click', function() {
-                const config = {
-                    driveFolderUrl: document.getElementById('driveFolderUrl').value,
-                    dataRetention: document.getElementById('dataRetention').value,
-                    enableNotifications: document.getElementById('enableNotifications').checked
-                };
-                
-                showLoading();
-                
-                fetch(scriptURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'saveConfig',
-                        data: config
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showSuccess('Success', 'Configuration saved successfully');
-                    } else {
-                        showError('Error', data.message || 'Failed to save configuration');
-                    }
-                })
-                .catch(error => {
-                    showError('Error', 'Failed to save configuration');
-                    console.error('Error:', error);
-                })
-                .finally(() => {
-                    hideLoading();
-                });
+                }, 800);
             });
             
             // Generate report
-            document.getElementById('generateReportBtn').addEventListener('click', generatePDFReport);
+            document.getElementById('generateReportBtn').addEventListener('click', generateAnalyticsReport);
         }
         
         // Action functions
@@ -2342,7 +2291,7 @@
                     <p><strong>Name:</strong> ${coupon.fullName}</p>
                     <p><strong>Email:</strong> ${coupon.email}</p>
                     <p><strong>Mobile:</strong> ${coupon.mobile}</p>
-                    <p><strong>Course:</strong> ${coupon.courseCategory} - ${coupon.courseName}</p>
+                    <p><strong>Course:</strong> ${coupon.courseCategory}</p>
                     <p><strong>Coupon Code:</strong> ${coupon.couponCode}</p>
                     <p><strong>Status:</strong> ${coupon.emailSent}</p>
                     <p><strong>Date:</strong> ${new Date(coupon.timestamp).toLocaleString()}</p>
@@ -2361,32 +2310,11 @@
             
             showLoading();
             
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'resendCouponEmail',
-                    id: id
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSuccess('Success', 'Coupon email resent successfully');
-                    loadCouponsData(currentPage, getCurrentFilters());
-                } else {
-                    showError('Error', data.message || 'Failed to resend coupon email');
-                }
-            })
-            .catch(error => {
-                showError('Error', 'Failed to resend coupon email');
-                console.error('Error:', error);
-            })
-            .finally(() => {
+            // Mock resend for demo
+            setTimeout(() => {
+                showSuccess('Success', 'Coupon email resent successfully');
                 hideLoading();
-            });
+            }, 1000);
         }
         
         function deleteCoupon(id) {
@@ -2396,129 +2324,125 @@
             
             showLoading();
             
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'deleteCoupon',
-                    id: id
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSuccess('Success', 'Coupon deleted successfully');
-                    loadCouponsData(currentPage, getCurrentFilters());
-                } else {
-                    showError('Error', data.message || 'Failed to delete coupon');
-                }
-            })
-            .catch(error => {
-                showError('Error', 'Failed to delete coupon');
-                console.error('Error:', error);
-            })
-            .finally(() => {
+            // Mock delete for demo
+            setTimeout(() => {
+                showSuccess('Success', 'Coupon deleted successfully');
+                loadCouponsData(currentPage, getCurrentFilters());
                 hideLoading();
-            });
+            }, 800);
         }
         
-        // PDF Report Generation
-        function generatePDFReport() {
+        // PDF Export functions
+        function exportCouponsToPDF() {
             showLoading();
             
-            fetch(scriptURL + '?action=getReportData')
-                .then(response => response.json())
-                .then(data => {
-                    // Initialize jsPDF
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
-                    
-                    // Add title
-                    doc.setFontSize(20);
-                    doc.setTextColor(40, 40, 40);
-                    doc.text('Physics Wallah Coupon System Report', 105, 20, { align: 'center' });
-                    
-                    // Add date
-                    doc.setFontSize(12);
-                    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 30, { align: 'center' });
-                    
-                    // Add summary section
-                    doc.setFontSize(16);
-                    doc.text('Summary Statistics', 14, 45);
-                    doc.setFontSize(12);
-                    
-                    // Summary data
-                    const summaryData = [
-                        ['Total Coupons Sent', data.totalCoupons],
-                        ['Successful Emails', data.successEmails],
-                        ['Failed Emails', data.failedEmails],
-                        ['Pending Emails', data.pendingEmails],
-                        ['Top Course', `${data.topCourse.name} (${data.topCourse.count})`]
-                    ];
-                    
-                    // Add summary table
-                    doc.autoTable({
-                        startY: 50,
-                        head: [['Metric', 'Value']],
-                        body: summaryData,
-                        theme: 'grid',
-                        headStyles: {
-                            fillColor: [26, 26, 26],
-                            textColor: 255
-                        }
-                    });
-                    
-                    // Add charts section
-                    doc.setFontSize(16);
-                    doc.text('Coupon Trends', 14, doc.autoTable.previous.finalY + 15);
-                    
-                    // Add trends data
-                    const trendsData = data.trends.map(item => [item.date, item.count]);
-                    doc.autoTable({
-                        startY: doc.autoTable.previous.finalY + 20,
-                        head: [['Date', 'Coupons Sent']],
-                        body: trendsData,
-                        theme: 'grid',
-                        headStyles: {
-                            fillColor: [26, 26, 26],
-                            textColor: 255
-                        }
-                    });
-                    
-                    // Add courses section
-                    doc.setFontSize(16);
-                    doc.text('Course Popularity', 14, doc.autoTable.previous.finalY + 15);
-                    
-                    // Add courses data
-                    const coursesData = data.courses.map(item => [item.name, item.count]);
-                    doc.autoTable({
-                        startY: doc.autoTable.previous.finalY + 20,
-                        head: [['Course', 'Coupons Sent']],
-                        body: coursesData,
-                        theme: 'grid',
-                        headStyles: {
-                            fillColor: [26, 26, 26],
-                            textColor: 255
-                        }
-                    });
-                    
-                    // Add footer
-                    doc.setFontSize(10);
-                    doc.setTextColor(100);
-                    doc.text('© Physics Wallah - Confidential Report', 105, doc.internal.pageSize.height - 10, { align: 'center' });
-                    
-                    // Save the PDF
-                    doc.save('PW_Coupon_Report.pdf');
-                    
-                    hideLoading();
-                })
-                .catch(error => {
-                    hideLoading();
-                    showError('Error', 'Failed to generate report');
-                    console.error('Error:', error);
-                });
+            // Use jsPDF with autoTable plugin
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(18);
+            doc.text('Coupons Report', 105, 15, { align: 'center' });
+            
+            // Date
+            doc.setFontSize(12);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 25, { align: 'center' });
+            
+            // Table data
+            const headers = [
+                'Date', 
+                'Name', 
+                'Email', 
+                'Mobile', 
+                'Course', 
+                'Coupon Code', 
+                'Status'
+            ];
+            
+            const data = allCoupons.map(coupon => {
+                const date = new Date(coupon.timestamp);
+                return [
+                    date.toLocaleDateString(),
+                    coupon.fullName,
+                    coupon.email,
+                    coupon.mobile,
+                    coupon.courseCategory,
+                    coupon.couponCode,
+                    coupon.emailSent
+                ];
+            });
+            
+            // Add table
+            doc.autoTable({
+                head: [headers],
+                body: data,
+                startY: 30,
+                styles: {
+                    fontSize: 9,
+                    cellPadding: 3,
+                    valign: 'middle'
+                },
+                headStyles: {
+                    fillColor: [26, 26, 26],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 243, 240]
+                }
+            });
+            
+            // Save the PDF
+            doc.save('PW_Coupons_Report.pdf');
+            hideLoading();
+        }
+        
+        function generateAnalyticsReport() {
+            showLoading();
+            
+            // Use jsPDF with autoTable plugin
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(18);
+            doc.text('Analytics Report', 105, 15, { align: 'center' });
+            
+            // Date
+            doc.setFontSize(12);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 25, { align: 'center' });
+            
+            // Summary stats
+            doc.setFontSize(14);
+            doc.text('Summary Statistics', 14, 35);
+            
+            doc.setFontSize(12);
+            doc.text(`Total Coupons Sent: ${document.getElementById('totalCoupons').textContent}`, 14, 45);
+            doc.text(`Successful Emails: ${document.getElementById('successEmails').textContent}`, 14, 55);
+            doc.text(`Top Course: ${document.getElementById('topCourse').textContent} (${document.getElementById('topCourseCount').textContent})`, 14, 65);
+            
+            // Course popularity chart
+            doc.addPage();
+            doc.setFontSize(14);
+            doc.text('Course Popularity', 105, 15, { align: 'center' });
+            
+            // Get the canvas element and convert to image
+            const canvas = document.getElementById('coursesChart');
+            const imgData = canvas.toDataURL('image/png');
+            doc.addImage(imgData, 'PNG', 30, 25, 150, 75);
+            
+            // Conversion rates
+            doc.addPage();
+            doc.setFontSize(14);
+            doc.text('Conversion Rates', 105, 15, { align: 'center' });
+            
+            const canvas2 = document.getElementById('conversionChart');
+            const imgData2 = canvas2.toDataURL('image/png');
+            doc.addImage(imgData2, 'PNG', 30, 25, 150, 75);
+            
+            // Save the PDF
+            doc.save('PW_Analytics_Report.pdf');
+            hideLoading();
         }
     </script>
 </body>
