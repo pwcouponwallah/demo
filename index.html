@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PW Coupon System - Admin Dashboard</title>
+    <title>PW Coupon Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <style>
         :root {
             --primary: #1a1a1a;
-            --secondary: #333333;
+            --secondary: #333;
             --accent: #666666;
             --light: #f9f9f9;
             --dark: #111111;
@@ -28,23 +28,180 @@
             --warning: #ffc107;
             --danger: #dc3545;
             --info: #17a2b8;
+            --light-gray: #f5f5f5;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        
-        body {
             font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text);
+        }
+
+        body {
             background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Login Page Styles */
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            color: var(--accent);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.5rem 1rem;
+            box-shadow: var(--shadow);
+            display: none;
+            cursor: pointer;
+            white-space: nowrap;
+            background: none;
+            border: none;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            color: var(--primary);
+        }
+
+        .user-profile:hover .logout-btn {
+            display: block;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: -250px;
+            bottom: 0;
+            width: 250px;
+            background-color: var(--white);
+            border-right: 1px solid var(--border);
+            transition: var(--transition);
+            z-index: 90;
+            overflow-y: auto;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+            gap: 0.75rem;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        .sidebar-menu li a.active {
+            background-color: rgba(0,0,0,0.05);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu li a i {
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 60px;
+            padding: 2rem;
+            transition: var(--transition);
+        }
+
+        .sidebar.active + .main-content {
+            margin-left: 250px;
+        }
+
+        /* Login Page */
         .login-container {
             display: flex;
             justify-content: center;
@@ -136,161 +293,26 @@
             font-size: 0.9rem;
             display: none;
         }
-        
-        /* Header Styles */
-        header {
-            background-color: var(--white);
-            color: var(--text);
-            padding: 1rem 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .logo-icon {
-            color: var(--accent);
-        }
-        
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .user-avatar {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background-color: var(--light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: var(--primary);
-            border: 1px solid var(--border);
-        }
-        
-        .logout-btn {
-            background: none;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .logout-btn:hover {
-            color: var(--primary);
-        }
-        
-        /* Sidebar */
-        .dashboard-container {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-        
-        .sidebar {
-            width: 250px;
-            background-color: var(--white);
-            border-right: 1px solid var(--border);
-            padding: 1.5rem 0;
-            transition: var(--transition);
-            position: sticky;
-            top: 70px;
-            height: calc(100vh - 70px);
-        }
-        
-        .sidebar-menu {
-            list-style: none;
-        }
-        
-        .sidebar-menu li {
-            margin-bottom: 0.25rem;
-        }
-        
-        .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            color: var(--text);
-            text-decoration: none;
-            transition: var(--transition);
-            font-weight: 500;
-            font-size: 0.95rem;
-            gap: 0.75rem;
-        }
-        
-        .sidebar-menu li a:hover {
-            background-color: var(--light);
-            color: var(--primary);
-        }
-        
-        .sidebar-menu li a.active {
-            background-color: rgba(0,0,0,0.05);
-            color: var(--primary);
-            border-left: 3px solid var(--primary);
-        }
-        
-        .sidebar-menu li a i {
-            width: 1.25rem;
-            text-align: center;
-        }
-        
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            background-color: var(--bg);
-        }
-        
+
+        /* Page Header */
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
-        
+
         .page-title {
             font-size: 1.75rem;
             font-weight: 700;
             color: var(--primary);
         }
-        
+
         .page-actions {
             display: flex;
             gap: 1rem;
         }
-        
+
         /* Button Styles */
         .btn {
             display: inline-flex;
@@ -306,46 +328,46 @@
             font-size: 0.95rem;
             border: none;
         }
-        
+
         .btn-primary {
             background-color: var(--primary);
             color: var(--white);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-primary:hover {
             background-color: var(--secondary);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-        
+
         .btn-secondary {
             background-color: var(--white);
             color: var(--primary);
             border: 1px solid var(--border);
         }
-        
+
         .btn-secondary:hover {
             background-color: var(--light);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        
+
         .btn-success {
             background-color: var(--success);
             color: white;
         }
-        
+
         .btn-danger {
             background-color: var(--danger);
             color: white;
         }
-        
+
         .btn-sm {
             padding: 0.5rem 1rem;
             font-size: 0.85rem;
         }
-        
+
         /* Cards */
         .card {
             background-color: var(--white);
@@ -355,7 +377,7 @@
             margin-bottom: 2rem;
             border: 1px solid var(--border);
         }
-        
+
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -364,13 +386,13 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .card-title {
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--primary);
         }
-        
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -378,7 +400,7 @@
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
-        
+
         .stat-card {
             background-color: var(--white);
             border-radius: var(--radius);
@@ -387,51 +409,51 @@
             border: 1px solid var(--border);
             transition: var(--transition);
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        
+
         .stat-title {
             font-size: 0.9rem;
             color: var(--gray);
             margin-bottom: 0.5rem;
         }
-        
+
         .stat-value {
             font-size: 1.75rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
-        
+
         .stat-change {
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.25rem;
         }
-        
+
         .stat-change.up {
             color: var(--success);
         }
-        
+
         .stat-change.down {
             color: var(--danger);
         }
-        
+
         /* Tables */
         .table-responsive {
             overflow-x: auto;
         }
-        
+
         .table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.95rem;
         }
-        
+
         .table th {
             background-color: var(--primary);
             color: white;
@@ -439,21 +461,21 @@
             padding: 1rem;
             text-align: left;
         }
-        
+
         .table td {
             padding: 1rem;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
         }
-        
+
         .table tr:last-child td {
             border-bottom: none;
         }
-        
+
         .table tr:hover td {
             background-color: rgba(0,0,0,0.02);
         }
-        
+
         .status-badge {
             display: inline-block;
             padding: 0.35rem 0.75rem;
@@ -461,27 +483,27 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
         .status-badge.success {
             background-color: rgba(40, 167, 69, 0.1);
             color: var(--success);
         }
-        
+
         .status-badge.warning {
             background-color: rgba(255, 193, 7, 0.1);
             color: var(--warning);
         }
-        
+
         .status-badge.danger {
             background-color: rgba(220, 53, 69, 0.1);
             color: var(--danger);
         }
-        
+
         /* Forms */
         .form-group {
             margin-bottom: 1.25rem;
         }
-        
+
         .form-label {
             font-weight: 500;
             margin-bottom: 0.5rem;
@@ -489,7 +511,7 @@
             color: var(--text);
             font-size: 0.9rem;
         }
-        
+
         .form-control {
             border-radius: 8px;
             padding: 0.85rem 1rem;
@@ -502,24 +524,24 @@
             background-color: var(--white);
             color: var(--text);
         }
-        
+
         .form-control:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
             outline: none;
         }
-        
+
         .form-row {
             display: flex;
             gap: 1.5rem;
             margin-bottom: 1.25rem;
         }
-        
+
         .form-row .form-group {
             flex: 1;
             margin-bottom: 0;
         }
-        
+
         /* Date Range Picker */
         .date-range-picker {
             display: flex;
@@ -527,11 +549,11 @@
             align-items: center;
             margin-bottom: 1.5rem;
         }
-        
+
         .date-range-picker .form-control {
             max-width: 180px;
         }
-        
+
         /* Charts */
         .chart-container {
             position: relative;
@@ -539,14 +561,14 @@
             width: 100%;
             margin-bottom: 2rem;
         }
-        
+
         /* Tabs */
         .tabs {
             display: flex;
             border-bottom: 1px solid var(--border);
             margin-bottom: 1.5rem;
         }
-        
+
         .tab {
             padding: 0.75rem 1.5rem;
             cursor: pointer;
@@ -555,20 +577,20 @@
             border-bottom: 2px solid transparent;
             transition: var(--transition);
         }
-        
+
         .tab.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
         }
-        
+
         .tab-content {
             display: none;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
+
         /* Filters */
         .filters {
             display: flex;
@@ -576,13 +598,13 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
-        
+
         .filter-group {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         /* Pagination */
         .pagination {
             display: flex;
@@ -590,11 +612,11 @@
             gap: 0.5rem;
             margin-top: 2rem;
         }
-        
+
         .page-item {
             display: inline-flex;
         }
-        
+
         .page-link {
             padding: 0.5rem 0.75rem;
             border: 1px solid var(--border);
@@ -603,17 +625,17 @@
             border-radius: 4px;
             transition: var(--transition);
         }
-        
+
         .page-link:hover {
             background-color: var(--light);
         }
-        
+
         .page-link.active {
             background-color: var(--primary);
             color: white;
             border-color: var(--primary);
         }
-        
+
         /* Alert */
         .alert {
             padding: 1rem;
@@ -623,25 +645,25 @@
             align-items: center;
             gap: 1rem;
         }
-        
+
         .alert-success {
             background-color: rgba(40, 167, 69, 0.1);
             color: var(--success);
             border: 1px solid rgba(40, 167, 69, 0.2);
         }
-        
+
         .alert-danger {
             background-color: rgba(220, 53, 69, 0.1);
             color: var(--danger);
             border: 1px solid rgba(220, 53, 69, 0.2);
         }
-        
+
         .alert-warning {
             background-color: rgba(255, 193, 7, 0.1);
             color: var(--warning);
             border: 1px solid rgba(255, 193, 7, 0.2);
         }
-        
+
         /* Modal Styles */
         .modal-overlay {
             position: fixed;
@@ -659,12 +681,12 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
         }
-        
+
         .modal-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .modal-container {
             background-color: var(--white);
             border-radius: var(--radius);
@@ -679,11 +701,11 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-        
+
         .modal-overlay.active .modal-container {
             transform: translateY(0);
         }
-        
+
         .modal-header {
             background-color: var(--primary);
             color: white;
@@ -691,13 +713,13 @@
             text-align: center;
             position: relative;
         }
-        
+
         .modal-header h3 {
             margin: 0;
             font-weight: 700;
             font-size: 1.25rem;
         }
-        
+
         .close-btn {
             position: absolute;
             top: 1rem;
@@ -710,15 +732,15 @@
             opacity: 0.7;
             transition: var(--transition);
         }
-        
+
         .close-btn:hover {
             opacity: 1;
         }
-        
+
         .modal-body {
             padding: 2rem;
         }
-        
+
         .modal-footer {
             padding: 1.5rem;
             border-top: 1px solid var(--border);
@@ -726,14 +748,14 @@
             justify-content: flex-end;
             gap: 1rem;
         }
-        
+
         /* Loading State */
         .loading-state {
             display: none;
             text-align: center;
             padding: 2rem;
         }
-        
+
         .loading-spinner {
             width: 3rem;
             height: 3rem;
@@ -743,32 +765,55 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 1.5rem;
         }
-        
+
         .loading-text {
             color: var(--text);
             font-weight: 500;
             margin-bottom: 0;
         }
-        
+
         /* Success/Error Icons */
         .modal-icon {
             font-size: 3rem;
             margin-bottom: 1.5rem;
         }
-        
+
         .success-icon {
             color: var(--success);
         }
-        
+
         .error-icon {
             color: var(--danger);
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
+
         /* Responsive Styles */
+        @media (min-width: 768px) {
+            .sidebar {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .logout-btn {
+                position: fixed;
+                top: 60px;
+                right: 1rem;
+                width: auto;
+            }
+        }
+
         @media (max-width: 992px) {
             .sidebar {
                 width: 220px;
@@ -780,34 +825,6 @@
         }
         
         @media (max-width: 768px) {
-            .dashboard-container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                position: static;
-                height: auto;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 1rem 0;
-            }
-            
-            .sidebar-menu {
-                display: flex;
-                overflow-x: auto;
-                padding: 0 1rem;
-            }
-            
-            .sidebar-menu li {
-                margin-bottom: 0;
-                white-space: nowrap;
-            }
-            
-            .sidebar-menu li a {
-                padding: 0.75rem 1rem;
-            }
-            
             .main-content {
                 padding: 1.5rem;
             }
@@ -824,17 +841,6 @@
         }
         
         @media (max-width: 576px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .header-right {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
             .page-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -862,7 +868,7 @@
     </style>
 </head>
 <body>
-    <!-- Login Page (shown by default) -->
+    <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="login-logo">
@@ -892,312 +898,307 @@
         </div>
     </div>
 
-    <!-- Dashboard (hidden by default) -->
+    <!-- Dashboard -->
     <div id="dashboardPage" style="display: none;">
         <!-- Header -->
-        <header>
-            <div class="container header-container">
-                <a href="#" class="logo">
-                    <i class="fas fa-tag logo-icon"></i>
-                    <span>PW Coupon Admin</span>
-                </a>
-                
-                <div class="header-right">
-                    <div class="user-info">
-                        <div class="user-avatar" id="userInitials">Y</div>
-                        <span id="userEmail">Yugal</span>
-                    </div>
-                    <button class="logout-btn" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </div>
+        <header id="mainHeader">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="#" class="logo">
+                <i class="fas fa-tag logo-icon"></i>
+                <span>PW Coupon Admin</span>
+            </a>
+            <div class="user-profile">
+                <div class="user-avatar" id="userInitials">Y</div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
         </header>
 
-        <!-- Dashboard Layout -->
-        <div class="dashboard-container">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <ul class="sidebar-menu">
-                    <li>
-                        <a href="#" class="active" data-tab="dashboard">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="coupons">
-                            <i class="fas fa-tags"></i>
-                            <span>Coupons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="analytics">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Analytics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="settings">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#" class="active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="coupons">
+                        <i class="fas fa-tags"></i>
+                        <span>Coupons</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <!-- Dashboard Tab -->
-                <div class="tab-content active" id="dashboard-tab">
-                    <div class="page-header">
-                        <h1 class="page-title">Dashboard Overview</h1>
-                        <div class="page-actions">
-                            <button class="btn btn-primary" id="refreshDashboard">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard-tab">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="refreshDashboard">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Coupons Sent</div>
+                        <div class="stat-value" id="totalCoupons">0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="couponsChange">0%</span> from last week
                         </div>
                     </div>
                     
-                    <!-- Stats Cards -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-title">Total Coupons Sent</div>
-                            <div class="stat-value" id="totalCoupons">0</div>
-                            <div class="stat-change up">
-                                <i class="fas fa-arrow-up"></i>
-                                <span id="couponsChange">0%</span> from last week
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-title">Successful Emails</div>
-                            <div class="stat-value" id="successEmails">0</div>
-                            <div class="stat-change up">
-                                <i class="fas fa-arrow-up"></i>
-                                <span id="emailsChange">0%</span> from last week
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-title">Top Course</div>
-                            <div class="stat-value" id="topCourse">-</div>
-                            <div class="stat-title" id="topCourseCount">0 enrollments</div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-title">Recent Activity</div>
-                            <div class="stat-value" id="recentActivity">0</div>
-                            <div class="stat-title">coupons today</div>
+                    <div class="stat-card">
+                        <div class="stat-title">Successful Emails</div>
+                        <div class="stat-value" id="successEmails">0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="emailsChange">0%</span> from last week
                         </div>
                     </div>
                     
-                    <!-- Charts -->
+                    <div class="stat-card">
+                        <div class="stat-title">Top Course</div>
+                        <div class="stat-value" id="topCourse">-</div>
+                        <div class="stat-title" id="topCourseCount">0 enrollments</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-title">Recent Activity</div>
+                        <div class="stat-value" id="recentActivity">0</div>
+                        <div class="stat-title">coupons today</div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Coupon Usage Trends</h2>
+                        <div class="date-range-picker">
+                            <select class="form-control" id="timeRange">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="90">Last 90 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="couponsChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Recent Coupons -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Coupon Requests</h2>
+                        <button class="btn btn-secondary btn-sm" id="viewAllCoupons">
+                            <i class="fas fa-list"></i> View All
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentCouponsTable">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coupons Tab -->
+            <div class="tab-content" id="coupons-tab">
+                <div class="page-header">
+                    <h1 class="page-title">Coupon Management</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="addCouponBtn">
+                            <i class="fas fa-plus"></i> Add Coupon
+                        </button>
+                        <button class="btn btn-secondary" id="exportCouponsBtn">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label class="form-label">Status:</label>
+                        <select class="form-control" id="filterStatus">
+                            <option value="all">All</option>
+                            <option value="sent">Sent</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="form-label">Course:</label>
+                        <select class="form-control" id="filterCourse">
+                            <option value="all">All Courses</option>
+                            <!-- Course options will be loaded here -->
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="form-label">Date Range:</label>
+                        <input type="date" class="form-control" id="filterStartDate">
+                        <span>to</span>
+                        <input type="date" class="form-control" id="filterEndDate">
+                    </div>
+                    
+                    <button class="btn btn-secondary btn-sm" id="applyFiltersBtn">
+                        <i class="fas fa-filter"></i> Apply
+                    </button>
+                    
+                    <button class="btn btn-secondary btn-sm" id="resetFiltersBtn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+                
+                <!-- Coupons Table -->
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Course</th>
+                                    <th>Coupon Code</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponsTable">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination" id="couponsPagination">
+                        <div class="page-item">
+                            <a href="#" class="page-link" data-page="prev">&laquo;</a>
+                        </div>
+                        <!-- Page numbers will be added here -->
+                        <div class="page-item">
+                            <a href="#" class="page-link" data-page="next">&raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analytics-tab">
+                <div class="page-header">
+                    <h1 class="page-title">Analytics & Reports</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="generateReportBtn">
+                            <i class="fas fa-file-pdf"></i> Generate Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-analytics-tab="courses">Courses</div>
+                    <div class="tab" data-analytics-tab="time">Time Analysis</div>
+                </div>
+                
+                <div class="tab-content active" id="courses-analytics">
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="card-title">Coupon Usage Trends</h2>
-                            <div class="date-range-picker">
-                                <select class="form-control" id="timeRange">
-                                    <option value="7">Last 7 Days</option>
-                                    <option value="30">Last 30 Days</option>
-                                    <option value="90">Last 90 Days</option>
-                                </select>
-                            </div>
+                            <h2 class="card-title">Course Popularity</h2>
                         </div>
                         <div class="chart-container">
-                            <canvas id="couponsChart"></canvas>
+                            <canvas id="coursesChart"></canvas>
                         </div>
-                    </div>
-                    
-                    <!-- Recent Coupons -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Recent Coupon Requests</h2>
-                            <button class="btn btn-secondary btn-sm" id="viewAllCoupons">
-                                <i class="fas fa-list"></i> View All
-                            </button>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Course</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recentCouponsTable">
-                                    <!-- Data will be loaded here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Coupons Tab -->
-                <div class="tab-content" id="coupons-tab">
-                    <div class="page-header">
-                        <h1 class="page-title">Coupon Management</h1>
-                        <div class="page-actions">
-                            <button class="btn btn-primary" id="addCouponBtn">
-                                <i class="fas fa-plus"></i> Add Coupon
-                            </button>
-                            <button class="btn btn-secondary" id="exportCouponsBtn">
-                                <i class="fas fa-file-export"></i> Export
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Filters -->
-                    <div class="filters">
-                        <div class="filter-group">
-                            <label class="form-label">Status:</label>
-                            <select class="form-control" id="filterStatus">
-                                <option value="all">All</option>
-                                <option value="sent">Sent</option>
-                                <option value="pending">Pending</option>
-                                <option value="failed">Failed</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label class="form-label">Course:</label>
-                            <select class="form-control" id="filterCourse">
-                                <option value="all">All Courses</option>
-                                <!-- Course options will be loaded here -->
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label class="form-label">Date Range:</label>
-                            <input type="date" class="form-control" id="filterStartDate">
-                            <span>to</span>
-                            <input type="date" class="form-control" id="filterEndDate">
-                        </div>
-                        
-                        <button class="btn btn-secondary btn-sm" id="applyFiltersBtn">
-                            <i class="fas fa-filter"></i> Apply
-                        </button>
-                        
-                        <button class="btn btn-secondary btn-sm" id="resetFiltersBtn">
-                            <i class="fas fa-redo"></i> Reset
-                        </button>
-                    </div>
-                    
-                    <!-- Coupons Table -->
-                    <div class="card">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Timestamp</th>
-                                        <th>Full Name</th>
-                                        <th>Email</th>
-                                        <th>Mobile</th>
-                                        <th>Course</th>
-                                        <th>Coupon Code</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="couponsTable">
-                                    <!-- Data will be loaded here -->
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Pagination -->
-                        <div class="pagination" id="couponsPagination">
-                            <div class="page-item">
-                                <a href="#" class="page-link" data-page="prev">&laquo;</a>
-                            </div>
-                            <!-- Page numbers will be added here -->
-                            <div class="page-item">
-                                <a href="#" class="page-link" data-page="next">&raquo;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Analytics Tab -->
-                <div class="tab-content" id="analytics-tab">
-                    <div class="page-header">
-                        <h1 class="page-title">Analytics & Reports</h1>
-                        <div class="page-actions">
-                            <button class="btn btn-primary" id="generateReportBtn">
-                                <i class="fas fa-file-pdf"></i> Generate Report
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="tabs">
-                        <div class="tab active" data-analytics-tab="courses">Courses</div>
-                        <div class="tab" data-analytics-tab="time">Time Analysis</div>
-                    </div>
-                    
-                    <div class="tab-content active" id="courses-analytics">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Course Popularity</h2>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="coursesChart"></canvas>
-                            </div>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Course Conversion Rates</h2>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="conversionChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-content" id="time-analytics">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Daily Activity</h2>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="dailyChart"></canvas>
-                            </div>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Hourly Activity</h2>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="hourlyChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Settings Tab -->
-                <div class="tab-content" id="settings-tab">
-                    <div class="page-header">
-                        <h1 class="page-title">System Settings</h1>
                     </div>
                     
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="card-title">Email Template</h2>
+                            <h2 class="card-title">Course Conversion Rates</h2>
                         </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="form-label">Email Subject</label>
-                                <input type="text" class="form-control" id="emailSubject" value="Your Exclusive Physics Wallah Discount is Ready">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Email Body (HTML)</label>
-                                <textarea class="form-control" id="emailBody" rows="12" style="font-family: monospace;">
+                        <div class="chart-container">
+                            <canvas id="conversionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="time-analytics">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Daily Activity</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="dailyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Hourly Activity</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="hourlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings-tab">
+                <div class="page-header">
+                    <h1 class="page-title">System Settings</h1>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Email Template</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Email Subject</label>
+                            <input type="text" class="form-control" id="emailSubject" value="Your Exclusive Physics Wallah Discount is Ready">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Body (HTML)</label>
+                            <textarea class="form-control" id="emailBody" rows="12" style="font-family: monospace;">
 <!DOCTYPE html>
 <html>
 <head>
@@ -1234,46 +1235,45 @@
     </div>
 </body>
 </html>
-                                </textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Default Coupon Code</label>
-                                <input type="text" class="form-control" id="defaultCouponCode" value="YUGNA00001">
-                            </div>
-                            
-                            <button class="btn btn-primary" id="saveSettingsBtn">
-                                <i class="fas fa-save"></i> Save Settings
-                            </button>
+                            </textarea>
                         </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Default Coupon Code</label>
+                            <input type="text" class="form-control" id="defaultCouponCode" value="YUGNA00001">
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
                     </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">System Configuration</h2>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">System Configuration</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Google Drive Folder URL</label>
+                            <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/your-folder">
                         </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="form-label">Google Drive Folder URL</label>
-                                <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/your-folder">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Data Retention (Days)</label>
-                                <input type="number" class="form-control" id="dataRetention" value="365">
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="enableNotifications">
-                                    <label class="form-check-label" for="enableNotifications">Enable Email Notifications</label>
-                                </div>
-                            </div>
-                            
-                            <button class="btn btn-primary" id="saveConfigBtn">
-                                <i class="fas fa-save"></i> Save Configuration
-                            </button>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Data Retention (Days)</label>
+                            <input type="number" class="form-control" id="dataRetention" value="365">
                         </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="enableNotifications">
+                                <label class="form-check-label" for="enableNotifications">Enable Email Notifications</label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveConfigBtn">
+                            <i class="fas fa-save"></i> Save Configuration
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1393,6 +1393,7 @@
         const itemsPerPage = 10;
         let sessionTimeout;
         const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+        let lastScrollPosition = 0;
         
         // Google Apps Script deployment URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwVp8BecSX-NdPH1jbNwKtYZNJCUzhSbOTy4mVifKt0nzwABvSU_QDYP_ydBCHQz4P4/exec';
@@ -1402,6 +1403,18 @@
             username: "Yugal",
             password: "Yugal11jan911@"
         };
+        
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const mainHeader = document.getElementById('mainHeader');
+        const tabLinks = document.querySelectorAll('.sidebar-menu li a');
+        const tabContents = document.querySelectorAll('.tab-content');
         
         // Check authentication on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -1417,6 +1430,14 @@
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 handleLogout();
             });
+            
+            // Toggle sidebar on mobile
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Initialize scroll header behavior
+            initScrollHeader();
         });
         
         // Authentication functions
@@ -1434,7 +1455,6 @@
                 
                 // Update UI with actual user info
                 document.getElementById('userInitials').textContent = getInitials(currentUser.name);
-                document.getElementById('userEmail').textContent = currentUser.name;
                 
                 // Show dashboard
                 showDashboard();
@@ -1471,7 +1491,6 @@
                 
                 // Update UI with actual user info
                 document.getElementById('userInitials').textContent = getInitials(currentUser.name);
-                document.getElementById('userEmail').textContent = currentUser.name;
                 
                 // Hide login error if shown
                 errorElement.style.display = 'none';
@@ -1547,6 +1566,23 @@
             document.addEventListener('scroll', resetSessionTimer);
         }
         
+        // Initialize scroll header behavior
+        function initScrollHeader() {
+            window.addEventListener('scroll', function() {
+                const currentScrollPosition = window.pageYOffset;
+                
+                if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 60) {
+                    // Scroll down
+                    mainHeader.classList.add('hidden');
+                } else {
+                    // Scroll up
+                    mainHeader.classList.remove('hidden');
+                }
+                
+                lastScrollPosition = currentScrollPosition;
+            });
+        }
+        
         // Helper functions
         function getInitials(name) {
             return name ? name.charAt(0).toUpperCase() : '';
@@ -1601,6 +1637,11 @@
                     // Show selected tab content
                     const tabId = this.getAttribute('data-tab') + '-tab';
                     document.getElementById(tabId).classList.add('active');
+                    
+                    // Close sidebar on mobile
+                    if (window.innerWidth < 768) {
+                        sidebar.classList.remove('active');
+                    }
                 });
             });
             
@@ -2331,6 +2372,15 @@
             
             // Generate report
             document.getElementById('generateReportBtn').addEventListener('click', generatePDFReport);
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth < 768 && 
+                    !sidebar.contains(e.target) && 
+                    !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
         }
         
         // Action functions
